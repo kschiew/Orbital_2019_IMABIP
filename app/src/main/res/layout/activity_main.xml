@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbarTrackHorizontal="@android:drawable/ic_input_add"
+    tools:context=".MainActivity">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addEvent"
+        android:layout_width="59dp"
+        android:layout_height="61dp"
+        android:layout_marginBottom="44dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="#03009688"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="16dp">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/eventList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Events" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/enrolledEvents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enrolled" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/accountView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Account" />
+    </android.support.design.widget.TabLayout>
+
+    <SearchView
+        android:id="@+id/search"
+        app:layout_constraintTop_toBottomOf="@id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="56dp" />
+
+
+</android.support.constraint.ConstraintLayout>
+
+
+

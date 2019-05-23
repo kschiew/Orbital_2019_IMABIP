@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1017497319325",
+    "firebase_url": "https://orbital19-imabip.firebaseio.com",
+    "project_id": "orbital19-imabip",
+    "storage_bucket": "orbital19-imabip.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017497319325:android:5faf501fdb0d48c9",
+        "android_client_info": {
+          "package_name": "com.orbital19.imabip"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1017497319325-ecnb2oqdjli3blikuakb45ftflej4887.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCz-DpwQoCPWUf8sVBXOiEmhs2RIRFHa18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1017497319325-ecnb2oqdjli3blikuakb45ftflej4887.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
