@@ -17,6 +17,12 @@ public class Chosen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle("Event chosen");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chosen);
 
@@ -31,6 +37,14 @@ public class Chosen extends AppCompatActivity {
         TextView venueTV = view.findViewById(R.id.ev_venue);
         TextView descriptionTV = view.findViewById(R.id.ev_description);
         TextView partyTV = view.findViewById(R.id.ev_party);
+
+        nameTV.setText(ev.getName());
+        hostTV.setText(ev.getHost());
+        timeTV.setText(ev.getTime().toString());
+        venueTV.setText(ev.getVenue());
+        descriptionTV.setText(ev.getDescription());
+        partyTV.setText(String.format("%d / %d", ev.getEnrolled().longValue(),
+                ev.getPartySize().longValue()));
 
         toJoin = findViewById(R.id.ev_join);
 

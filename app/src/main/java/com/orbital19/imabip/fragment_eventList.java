@@ -18,18 +18,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.orbital19.imabip.models.Event;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class eventList extends Fragment {
+public class fragment_eventList extends Fragment {
     private List<Event> events = new ArrayList<>();
-    private ListView listView;
+    private ListView list_View;
     private EventAdapter eventAdapter;
 
-    public eventList() {
+    public fragment_eventList() {
         // Required empty public constructor
     }
 
@@ -39,12 +38,25 @@ public class eventList extends Fragment {
 
         eventAdapter = new EventAdapter(getContext(), events);
 
-        listView.setAdapter(eventAdapter);
+        // list_View.setAdapter(eventAdapter);
 
+        // loadUserData();
+
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_event_list, container, false);
+
+        list_View = view.findViewById(R.id.listView);
+        list_View.setAdapter(eventAdapter);
         loadUserData();
 
-        //on click listener
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // on click listener
+        list_View.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
@@ -54,22 +66,34 @@ public class eventList extends Fragment {
                 startActivity(intent);
             }
         });
+
+        return view;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_event_list, container, false);
+    public void onActivityCreated (Bundle savedInstanceState) {
+        list_View = getView().findViewById(R.id.listView);
+        list_View.setAdapter(eventAdapter);
+        super.onActivityCreated(savedInstanceState);
+    }
 
-        listView = (ListView) view.findViewById(R.id.eventList);
-        return view;
+    @Override
+    public void onViewCreated (View view, Bundle savedInstanceState) {
+        list_View = getView().findViewById(R.id.listView);
+        list_View.setAdapter(eventAdapter);
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
+    }
+
+    @Override
+    public void onDestroy () {
+        super.onDestroy();
+        list_View = null;
     }
 
     @Override
