@@ -15,8 +15,8 @@
         <activity android:name=".Chosen" />
         <activity android:name=".Host" />
         <activity android:name=".Log_in" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SignupActivity">
+        <activity android:name=".SignupActivity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

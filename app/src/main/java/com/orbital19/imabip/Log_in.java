@@ -30,6 +30,12 @@ public class Log_in extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.log_in);
 
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle("Sign in");
+
         FirebaseApp.initializeApp(this);
 
         mAuth = FirebaseAuth.getInstance();

@@ -3,6 +3,7 @@ package com.orbital19.imabip.ui.login;
 import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -18,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.orbital19.imabip.MainActivity;
 import com.orbital19.imabip.R;
 import com.orbital19.imabip.ui.login.LoginViewModel;
 import com.orbital19.imabip.ui.login.LoginViewModelFactory;
@@ -33,10 +35,14 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle("Sign in");
+
         final EditText usernameEditText = findViewById(R.id.acc);
-        final EditText passwordEditText = findViewById(R.id.password);
+        final EditText passwordEditText = findViewById(R.id.pass);
         final Button loginButton = findViewById(R.id.login);
-        final ProgressBar loadingProgressBar = findViewById(R.id.pass);
+        final ProgressBar loadingProgressBar = findViewById(R.id.progBar);
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -70,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                 setResult(Activity.RESULT_OK);
 
                 //Complete and destroy login activity once successful
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
             }
         });

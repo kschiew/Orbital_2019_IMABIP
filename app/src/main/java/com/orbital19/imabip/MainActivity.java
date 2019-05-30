@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            startActivity(new Intent(this, Log_in.class));
+            startActivity(new Intent(this, SignupActivity.class));
             finish();
         }
 
@@ -49,16 +49,41 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.tabs);
         tabLayout.getTabAt(0);
-//        int tab_ind = tabLayout.getSelectedTabPosition();
+        int tab_ind = tabLayout.getSelectedTabPosition();
 //        switch (tab_ind) {
 //            default:
 //                break;
 //            case 0:
 //                displaySelectedScreen(new fragment_eventList());
 //                break;
+//            case 1:
+//                break;
+//            case 2:
+//                displaySelectedScreen(new fragment_view_Account());
+//                break;
 //        }
-        displaySelectedScreen(new fragment_eventList());
+        displaySelectedScreen(new fragment_view_Account());
 
+    }
+
+    @Override
+    public void onStart() {
+        tabLayout = findViewById(R.id.tabs);
+        tabLayout.getTabAt(0);
+        int tab_ind = tabLayout.getSelectedTabPosition();
+//        switch (tab_ind) {
+//            default:
+//                break;
+//            case 0:
+//                displaySelectedScreen(new fragment_eventList());
+//                break;
+//            case 1:
+//                break;
+//            case 2:
+//                displaySelectedScreen(new fragment_view_Account());
+//                break;
+//        }
+        super.onStart();
     }
 
     private boolean displaySelectedScreen(Fragment fragment) {

@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.orbital19.imabip.ui.login.LoginActivity;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -45,9 +46,13 @@ public class SignupActivity extends AppCompatActivity {
             }
         });*/
 
+        /*
+        To Sign In screen
+         */
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 finish();
             }
         });
