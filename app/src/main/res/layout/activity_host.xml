@@ -10,29 +10,52 @@
         android:id="@+id/input_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Event name"/>
+        android:hint="Event name"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/input_name"
+        android:id="@+id/input_venue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Event name"/>
+        app:layout_constraintTop_toBottomOf="@id/input_name"
+        android:hint="Venue"/>
 
     <EditText
-        android:id="@+id/input_name"
+        android:id="@+id/input_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Event name"/>
+        app:layout_constraintTop_toBottomOf="@id/input_venue"
+        android:hint="Time"/>
 
     <EditText
-        android:id="@+id/input_name"
+        android:id="@+id/input_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Event name"/>
+        app:layout_constraintTop_toBottomOf="@id/input_time"
+        android:hint="Description"/>
 
     <EditText
-        android:id="@+id/input_name"
+        android:id="@+id/input_filled"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Event name"/>
+        app:layout_constraintTop_toBottomOf="@id/input_description"
+        app:layout_constraintLeft_toLeftOf="@id/input_pax"
+        android:hint="No. of participants"/>
+
+    <EditText
+        android:id="@+id/input_pax"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/input_filled"
+        android:hint="Maximum party size"/>
+
+    <Button
+        android:id="@+id/host_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Host"
+        app:layout_constraintTop_toBottomOf="@id/input_pax"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 </android.support.constraint.ConstraintLayout>
