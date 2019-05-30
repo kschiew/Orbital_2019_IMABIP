@@ -30,6 +30,13 @@
         android:text="Login"
         android:textSize="18sp"/>
 
+    <Button
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:textSize="18sp"/>
+
     <ProgressBar
         android:id="@+id/progBar"
         android:layout_width="wrap_content"
