@@ -18,8 +18,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.orbital19.imabip.models.Event;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -36,11 +36,11 @@ public class fragment_eventList extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        eventAdapter = new EventAdapter(getContext(), events);
+//        eventAdapter = new EventAdapter(getContext(), events);
 
-        // list_View.setAdapter(eventAdapter);
+//        list_View.setAdapter(eventAdapter);
 
-        // loadUserData();
+//        loadUserData();
 
 
     }
@@ -51,9 +51,13 @@ public class fragment_eventList extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_event_list, container, false);
 
+        loadUserData();
+        eventAdapter = new EventAdapter(getContext(), events);
+
         list_View = view.findViewById(R.id.listView);
         list_View.setAdapter(eventAdapter);
-        loadUserData();
+
+//        loadUserData();
 
         // on click listener
         list_View.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -105,7 +109,7 @@ public class fragment_eventList extends Fragment {
         FirebaseFirestore fs = FirebaseFirestore.getInstance();
 
 
-        fs.collection(Event.availableEventCollection).orderBy(Event.evTimeKey).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        fs.collection(Event.availableEventCollection).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
@@ -118,10 +122,10 @@ public class fragment_eventList extends Fragment {
                 for (DocumentSnapshot doc : documents) {
 
                     // should perform checking
-                    Event EV = new Event((String[]) doc.get(Event.contactKey), (String) doc.get(Event.descriptionKey),
+                    Event EV = new Event((ArrayList<String>) doc.get(Event.contactKey), (String) doc.get(Event.descriptionKey),
                             (String) doc.get(Event.hostIDKey), (String) doc.get(Event.nameKey),
                             (String) doc.get(Event.typeKey), (String) doc.get(Event.venueKey),
-                            (Timestamp) doc.get(Event.evTimeKey), (Long) doc.get(Event.partySizeKey),
+                            (Date) doc.get(Event.evTimeKey), (Long) doc.get(Event.partySizeKey),
                             (Long) doc.get(Event.enrolledKey));
 
                     events.add(EV);

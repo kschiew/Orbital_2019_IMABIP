@@ -47,42 +47,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        tabLayout = findViewById(R.id.tabs);
-        tabLayout.getTabAt(0);
-        int tab_ind = tabLayout.getSelectedTabPosition();
-//        switch (tab_ind) {
-//            default:
-//                break;
-//            case 0:
-//                displaySelectedScreen(new fragment_eventList());
-//                break;
-//            case 1:
-//                break;
-//            case 2:
-//                displaySelectedScreen(new fragment_view_Account());
-//                break;
-//        }
-        displaySelectedScreen(new fragment_view_Account());
+        displaySelectedScreen(new fragment_eventList());
 
+        tabLayout = findViewById(R.id.tabs);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int ind = tab.getPosition();
+                Fragment fragment = null;
+                switch (ind) {
+                    case 0:
+                        fragment = new fragment_eventList();
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        fragment = new fragment_view_Account();
+                }
+                displaySelectedScreen(fragment);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     @Override
     public void onStart() {
-        tabLayout = findViewById(R.id.tabs);
-        tabLayout.getTabAt(0);
-        int tab_ind = tabLayout.getSelectedTabPosition();
-//        switch (tab_ind) {
-//            default:
-//                break;
-//            case 0:
-//                displaySelectedScreen(new fragment_eventList());
-//                break;
-//            case 1:
-//                break;
-//            case 2:
-//                displaySelectedScreen(new fragment_view_Account());
-//                break;
-//        }
         super.onStart();
     }
 
