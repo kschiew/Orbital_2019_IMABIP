@@ -22,6 +22,7 @@ public class Event implements Serializable {
     public static String evTimeKey = "Time";
     public static String partySizeKey = "PartySize";
     public static String enrolledKey = "Enrolled";
+    public static String playersKey = "Players";
 
     private String ID;
     private ArrayList<String> Contact = new ArrayList<>();
@@ -33,6 +34,7 @@ public class Event implements Serializable {
     private Date EvTime;
     private Long PartySize;
     private Long Enrolled;
+    private ArrayList<User> Players;
 
 
     public Event(ArrayList<String> contact, String desc, String host, String name, String type, String venue,
@@ -59,6 +61,7 @@ public class Event implements Serializable {
     public Date getTime() { return EvTime; }
     public Long getPartySize() { return PartySize; }
     public Long getEnrolled() { return Enrolled; }
+    public String getID() { return ID; }
 
     public void createEntry() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -78,11 +81,23 @@ public class Event implements Serializable {
         db.collection(availableEventCollection).document(ID).set(event);
     }
 
-    public void partyUp() {
+    public void partyUp(User user) {
         PartySize++;
+        Players.add(user);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection(availableEventCollection).document(ID).update(partySizeKey, PartySize);
+        db.collection(availableEventCollection).document(ID).update(playersKey, Players);
+    }
+
+    public void partyDown(User user) {
+        PartySize--;
+        Players.remove(user);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection(availableEventCollection).document(ID).update(partySizeKey, PartySize);
+        db.collection(availableEventCollection).document(ID).update(playersKey, Players);
     }
 }

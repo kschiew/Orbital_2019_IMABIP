@@ -57,8 +57,6 @@ public class fragment_eventList extends Fragment {
         list_View = view.findViewById(R.id.listView);
         list_View.setAdapter(eventAdapter);
 
-//        loadUserData();
-
         // on click listener
         list_View.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

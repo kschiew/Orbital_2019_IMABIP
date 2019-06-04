@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <venues name="MPSH1">"SH1"</venues>
+    <venues name="MPSH2">"SH2"</venues>
+    <venues name="MPSH3">"SH3"</venues>
+    <venues name="MPSH4">"SH4"</venues>
+    <venues name="MPSH5">"SH5"</venues>
+</resources>

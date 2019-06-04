@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new fragment_eventList();
                         break;
                     case 1:
+                        fragment = new fragment_enrolled();
                         break;
                     case 2:
                         fragment = new fragment_view_Account();
