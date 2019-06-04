@@ -19,6 +19,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
+import java.util.ArrayList;
+
 public class Chosen extends AppCompatActivity {
 
     private Button toJoin;
@@ -66,7 +68,13 @@ public class Chosen extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         DocumentSnapshot doc = task.getResult();
+
+                        ArrayList<String> evs = (ArrayList<String>) doc.get(User.enrolledKey);
+
                         
+
+                        FirebaseFirestore.getInstance().collection(Event.availableEventCollection)
+                                .document(ev.getID()).update(Event.enrolledKey, ev.getEnrolled() + 1);
                     }
                 });
 

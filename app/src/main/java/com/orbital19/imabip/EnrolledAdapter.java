@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EnrolledAdapter extends ArrayAdapter<Event> {
@@ -36,10 +37,10 @@ public class EnrolledAdapter extends ArrayAdapter<Event> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.details_enrolled_list_row, parent, false);
 
-        TextView nameTV = rowView.findViewById(R.id.eventName);
-        TextView hostTV = rowView.findViewById(R.id.hostID);
-        TextView paxTV = rowView.findViewById(R.id.pax);
-        TextView timeTV = rowView.findViewById(R.id.time);
+        TextView nameTV = rowView.findViewById(R.id.eventName_enrolled);
+        TextView hostTV = rowView.findViewById(R.id.hostID_enrolled);
+        TextView paxTV = rowView.findViewById(R.id.pax_enrolled);
+        TextView timeTV = rowView.findViewById(R.id.time_enrolled);
         TextView dropTV = rowView.findViewById(R.id.drop_ev);
 
         final Event cur = values.get(position);
@@ -58,7 +59,12 @@ public class EnrolledAdapter extends ArrayAdapter<Event> {
                         User user = new User((String) doc.get(User.emailKey), (String) doc.get(User.nameKey),
                                 (String) doc.get(User.phoneKey), (String) doc.get(User.idKey));
 
-                        user.drop(cur);
+                        ArrayList<String> evs = (ArrayList<String>) doc.get(User.enrolledKey);
+                        evs.remove(cur);
+                        FirebaseFirestore.getInstance().collection(User.usersCollection)
+                                .document(user.getID()).update(User.enrolledKey, evs);
+
+                        cur.partyDown(user);
                     }
                 });
             }

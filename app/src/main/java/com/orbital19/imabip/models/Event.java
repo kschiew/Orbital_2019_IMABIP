@@ -49,7 +49,9 @@ public class Event implements Serializable {
         EvTime = time;
         PartySize = size;
         Enrolled = enrolled;
-        ID = "" + (HostID.hashCode() + Name.hashCode() + EvTime.hashCode());
+//        ID = "" + (HostID.hashCode() + Name.hashCode() + EvTime.hashCode());
+        ID = "ev1";
+        Players = new ArrayList<>();
     }
 
     public ArrayList<String> getContact() { return Contact; }
@@ -82,22 +84,22 @@ public class Event implements Serializable {
     }
 
     public void partyUp(User user) {
-        PartySize++;
+        Enrolled++;
         Players.add(user.getID());
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection(availableEventCollection).document(ID).update(partySizeKey, PartySize);
+        db.collection(availableEventCollection).document(ID).update(enrolledKey, Enrolled);
         db.collection(availableEventCollection).document(ID).update(playersKey, Players);
     }
 
     public void partyDown(User user) {
-        PartySize--;
+        Enrolled--;
         Players.remove(user);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection(availableEventCollection).document(ID).update(partySizeKey, PartySize);
+        db.collection(availableEventCollection).document(ID).update(enrolledKey, Enrolled);
         db.collection(availableEventCollection).document(ID).update(playersKey, Players);
     }
 }

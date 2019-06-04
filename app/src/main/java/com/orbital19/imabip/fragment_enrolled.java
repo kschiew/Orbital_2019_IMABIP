@@ -42,12 +42,11 @@ public class fragment_enrolled extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_enrolled_view, container, false);
 
+        loadEvents();
         enrolledAdapter = new EnrolledAdapter(getContext(), events);
 
         listView = view.findViewById(R.id.enrolled_list);
         listView.setAdapter(enrolledAdapter);
-
-        loadEvents();
 
         return view;
     }
