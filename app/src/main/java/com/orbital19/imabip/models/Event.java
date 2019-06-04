@@ -34,7 +34,7 @@ public class Event implements Serializable {
     private Date EvTime;
     private Long PartySize;
     private Long Enrolled;
-    private ArrayList<User> Players;
+    private ArrayList<String> Players;
 
 
     public Event(ArrayList<String> contact, String desc, String host, String name, String type, String venue,
@@ -83,7 +83,7 @@ public class Event implements Serializable {
 
     public void partyUp(User user) {
         PartySize++;
-        Players.add(user);
+        Players.add(user.getID());
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
