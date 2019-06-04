@@ -61,4 +61,8 @@ public class User implements Serializable {
 
         event.partyDown(this);
     }
+
+    public String getID() {
+        return ID;
+    }
 }
