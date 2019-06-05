@@ -12,6 +12,7 @@ import com.orbital19.imabip.models.Event;
 import org.w3c.dom.Text;
 
 import java.util.List;
+import java.util.Locale;
 
 public class EventAdapter extends ArrayAdapter<Event> {
     private final Context context;
@@ -38,8 +39,9 @@ public class EventAdapter extends ArrayAdapter<Event> {
 
         nameTV.setText(cur.getName());
         hostTV.setText(cur.getHost());
-        timeTV.setText(cur.getTime().toString());
-        String pax = String.format("%d / %d", cur.getEnrolled().longValue(), cur.getPartySize().longValue());
+        timeTV.setText(cur.getTime());
+        String pax = String.format(Locale.getDefault(),
+                "%d / %d", cur.getEnrolled(), cur.getPartySize());
         paxTV.setText(pax);
 
 

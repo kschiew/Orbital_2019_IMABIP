@@ -1,6 +1,7 @@
 package com.orbital19.imabip;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +14,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class EnrolledAdapter extends ArrayAdapter<Event> {
 
@@ -32,10 +35,10 @@ public class EnrolledAdapter extends ArrayAdapter<Event> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup container) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.details_enrolled_list_row, parent, false);
+        View rowView = inflater.inflate(R.layout.details_enrolled_list_row, container, false);
 
         TextView nameTV = rowView.findViewById(R.id.eventName_enrolled);
         TextView hostTV = rowView.findViewById(R.id.hostID_enrolled);
@@ -49,31 +52,24 @@ public class EnrolledAdapter extends ArrayAdapter<Event> {
             @Override
             public void onClick(View v) {
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                FirebaseFirestore.getInstance().collection(User.usersCollection)
-                        .document(currentUser.getEmail()).get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        DocumentSnapshot doc = task.getResult();
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                        User user = new User((String) doc.get(User.emailKey), (String) doc.get(User.nameKey),
-                                (String) doc.get(User.phoneKey), (String) doc.get(User.idKey));
+                db.collection(User.usersCollection).document(currentUser.getEmail())
+                        .update(User.enrolledKey, FieldValue.arrayRemove(cur.getID()));
 
-                        ArrayList<String> evs = (ArrayList<String>) doc.get(User.enrolledKey);
-                        evs.remove(cur);
-                        FirebaseFirestore.getInstance().collection(User.usersCollection)
-                                .document(user.getID()).update(User.enrolledKey, evs);
+                db.collection(Event.availableEventCollection).document(cur.getID())
+                        .update(Event.enrolledKey, FieldValue.increment(-1));
 
-                        cur.partyDown(user);
-                    }
-                });
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                getContext().startActivity(intent);
             }
         });
 
         nameTV.setText(cur.getName());
         hostTV.setText(cur.getHost());
         timeTV.setText(cur.getTime().toString());
-        String pax = String.format("%d / %d", cur.getEnrolled().longValue(), cur.getPartySize().longValue());
+        String pax = String.format(Locale.getDefault(),
+                "%d / %d", cur.getEnrolled(), cur.getPartySize());
         paxTV.setText(pax);
 
 

@@ -15,15 +15,16 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class fragment_enrolled extends Fragment {
@@ -36,6 +37,10 @@ public class fragment_enrolled extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(Bundle savedInstances) {
+        super.onCreate(savedInstances);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,38 +69,34 @@ public class fragment_enrolled extends Fragment {
     private void loadEvents() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        events.removeAll(events);
 
         db.collection(User.usersCollection).document(currentUser.getEmail())
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    events.removeAll(events);
+                DocumentSnapshot thisUser = task.getResult();
+                ArrayList<String> enrolledList = (ArrayList<String>) thisUser.get(User.enrolledKey);
+                for (String id : enrolledList) {
+                    db.collection(Event.availableEventCollection).document(id)
+                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            DocumentSnapshot doc = task.getResult();
 
-                    DocumentSnapshot document = task.getResult();
+                            Event EV = new Event((ArrayList<String>) doc.get(Event.contactKey), (String) doc.get(Event.descriptionKey),
+                                    (String) doc.get(Event.hostIDKey), (String) doc.get(Event.nameKey),
+                                    (String) doc.get(Event.typeKey), (String) doc.get(Event.venueKey),
+                                    (String) doc.get(Event.evTimeKey), (Long) doc.get(Event.partySizeKey),
+                                    (Long) doc.get(Event.enrolledKey));
 
-                    if (document.exists()) {
-                        ArrayList<String> evs = (ArrayList<String>) document.get(User.enrolledKey);
+                            events.add(EV);
 
-                        for (String eventID : evs) {
-                            db.collection(Event.availableEventCollection).document(eventID)
-                                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    DocumentSnapshot doc = task.getResult();
-
-                                    Event EV = new Event((ArrayList<String>) doc.get(Event.contactKey), (String) doc.get(Event.descriptionKey),
-                                            (String) doc.get(Event.hostIDKey), (String) doc.get(Event.nameKey),
-                                            (String) doc.get(Event.typeKey), (String) doc.get(Event.venueKey),
-                                            (Date) doc.get(Event.evTimeKey), (Long) doc.get(Event.partySizeKey),
-                                            (Long) doc.get(Event.enrolledKey));
-
-                                    events.add(EV);
-                                }
-                            });
+                            enrolledAdapter.notifyDataSetChanged();
                         }
-                    }
+                    });
                 }
             }
         });

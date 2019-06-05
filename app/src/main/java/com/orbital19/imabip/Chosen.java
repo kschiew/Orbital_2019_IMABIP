@@ -14,12 +14,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Chosen extends AppCompatActivity {
 
@@ -53,8 +56,8 @@ public class Chosen extends AppCompatActivity {
         timeTV.setText(ev.getTime().toString());
         venueTV.setText(ev.getVenue());
         descriptionTV.setText(ev.getDescription());
-        partyTV.setText(String.format("%d / %d", ev.getEnrolled().longValue(),
-                ev.getPartySize().longValue()));
+        partyTV.setText(String.format(Locale.getDefault(),
+                "%d / %d", ev.getEnrolled(), ev.getPartySize()));
 
         toJoin = findViewById(R.id.ev_join);
 
@@ -63,32 +66,21 @@ public class Chosen extends AppCompatActivity {
             public void onClick(View v) {
                 FirebaseUser current = FirebaseAuth.getInstance().getCurrentUser();
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection(User.usersCollection).document(current.getEmail())
-                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        DocumentSnapshot doc = task.getResult();
 
-                        ArrayList<String> evs = (ArrayList<String>) doc.get(User.enrolledKey);
+                DocumentReference user = db.collection(User.usersCollection).document(current.getEmail());
+                user.update(User.enrolledKey, FieldValue.arrayUnion(ev.getID()));
 
-                        
+                DocumentReference event = db.collection(Event.availableEventCollection).document(ev.getID());
+                event.update(Event.enrolledKey, FieldValue.increment(1));
 
-                        FirebaseFirestore.getInstance().collection(Event.availableEventCollection)
-                                .document(ev.getID()).update(Event.enrolledKey, ev.getEnrolled() + 1);
-                    }
-                });
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
 
-                Bundle args = new Bundle();
-                args.putSerializable("Chosen event", ev);
-                Fragment frag = new Fragment();
-                frag.setArguments(args);
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.chosen_act, frag);
-                transaction.commit();
                 finish();
             }
         });
     }
+
 
     @Override
     public boolean onSupportNavigateUp() {

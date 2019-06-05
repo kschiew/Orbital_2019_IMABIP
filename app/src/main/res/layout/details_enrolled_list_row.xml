@@ -27,17 +27,6 @@
         app:layout_constraintTop_toBottomOf="@id/eventName_enrolled" />
 
     <TextView
-        android:id="@+id/drop_ev"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="300dp"
-        android:paddingRight="16dp"
-        android:text="drop"
-        android:textColor="@color/Red"
-        app:layout_constraintTop_toBottomOf="@id/eventName_enrolled"
-        app:layout_constraintLeft_toRightOf="@id/time_enrolled"/>
-
-    <TextView
         android:id="@+id/hostID_enrolled"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,4 +44,14 @@
         android:paddingRight="16dp"
         app:layout_constraintTop_toBottomOf="@id/time_enrolled"
         app:layout_constraintLeft_toRightOf="@id/hostID_enrolled"/>
+
+    <TextView
+        android:id="@+id/drop_ev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:text="drop"
+        android:textColor="@color/Red"
+        app:layout_constraintTop_toBottomOf="@id/hostID_enrolled"
+        app:layout_constraintStart_toStartOf="parent"/>
 </android.support.constraint.ConstraintLayout>

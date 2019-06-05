@@ -13,13 +13,13 @@ import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.orbital19.imabip.models.Event;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -35,14 +35,6 @@ public class fragment_eventList extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        eventAdapter = new EventAdapter(getContext(), events);
-
-//        list_View.setAdapter(eventAdapter);
-
-//        loadUserData();
-
-
     }
 
     @Override
@@ -123,7 +115,7 @@ public class fragment_eventList extends Fragment {
                     Event EV = new Event((ArrayList<String>) doc.get(Event.contactKey), (String) doc.get(Event.descriptionKey),
                             (String) doc.get(Event.hostIDKey), (String) doc.get(Event.nameKey),
                             (String) doc.get(Event.typeKey), (String) doc.get(Event.venueKey),
-                            (Date) doc.get(Event.evTimeKey), (Long) doc.get(Event.partySizeKey),
+                            (String) doc.get(Event.evTimeKey), (Long) doc.get(Event.partySizeKey),
                             (Long) doc.get(Event.enrolledKey));
 
                     events.add(EV);

@@ -2,11 +2,11 @@ package com.orbital19.imabip.models;
 
 import android.widget.ArrayAdapter;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,14 +31,14 @@ public class Event implements Serializable {
     private String Name;
     private String Type;
     private String Venue;
-    private Date EvTime;
+    private String EvTime;
     private Long PartySize;
     private Long Enrolled;
     private ArrayList<String> Players;
 
 
     public Event(ArrayList<String> contact, String desc, String host, String name, String type, String venue,
-                 Date time, Long size, Long enrolled) {
+                 String time, Long size, Long enrolled) {
         Contact.add(0, contact.get(0)); // email
         Contact.add(1, contact.get(1)); // phone
         Description = desc;
@@ -60,7 +60,7 @@ public class Event implements Serializable {
     public String getName() { return Name; }
     public String getVenue() { return Venue; }
     public String getType() { return Type; }
-    public Date getTime() { return EvTime; }
+    public String getTime() { return EvTime; }
     public Long getPartySize() { return PartySize; }
     public Long getEnrolled() { return Enrolled; }
     public String getID() { return ID; }
