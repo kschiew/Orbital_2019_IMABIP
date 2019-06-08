@@ -1,5 +1,6 @@
 package com.orbital19.imabip.models;
 
+import android.content.Context;
 import android.widget.ArrayAdapter;
 
 import com.google.firebase.Timestamp;
@@ -23,6 +24,8 @@ public class Event implements Serializable {
     public static String partySizeKey = "PartySize";
     public static String enrolledKey = "Enrolled";
     public static String playersKey = "Players";
+    public static String idKey = "ID";
+
 
     private String ID;
     private ArrayList<String> Contact = new ArrayList<>();
@@ -49,8 +52,7 @@ public class Event implements Serializable {
         EvTime = time;
         PartySize = size;
         Enrolled = enrolled;
-//        ID = "" + (HostID.hashCode() + Name.hashCode() + EvTime.hashCode());
-        ID = "ev1";
+        ID = Contact.get(0).substring(0, 6) + Contact.get(1).substring(0, 4);
         Players = new ArrayList<>();
     }
 

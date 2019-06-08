@@ -14,10 +14,13 @@ import android.widget.ListView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.orbital19.imabip.models.Event;
+import com.orbital19.imabip.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,8 +99,8 @@ public class fragment_eventList extends Fragment {
     }
 
     private void loadUserData() {
-        FirebaseFirestore fs = FirebaseFirestore.getInstance();
-
+        final FirebaseFirestore fs = FirebaseFirestore.getInstance();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         fs.collection(Event.availableEventCollection).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -110,6 +113,9 @@ public class fragment_eventList extends Fragment {
                 events.removeAll(events);
 
                 for (DocumentSnapshot doc : documents) {
+                    // filter the enrolled event
+
+
 
                     // should perform checking
                     Event EV = new Event((ArrayList<String>) doc.get(Event.contactKey), (String) doc.get(Event.descriptionKey),
