@@ -14,10 +14,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:id="@+id/input_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Sport"
+        app:layout_constraintTop_toBottomOf="@id/input_name"/>
+
+    <EditText
         android:id="@+id/input_venue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/input_name"
+        app:layout_constraintTop_toBottomOf="@id/input_type"
         android:hint="Venue"/>
 
     <EditText

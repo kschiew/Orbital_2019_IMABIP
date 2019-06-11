@@ -1,6 +1,6 @@
 # Orbital_2019_IMABIP
 
-Proposed Level of Achievement: Apollo 11
+Proposed Level of Achievement: Gemini
 
 Motivation:
 Want to try out a new sport but does't know anyone with the same thoughts?
