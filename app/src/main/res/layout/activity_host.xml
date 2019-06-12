@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/input_venue"
         app:layout_constraintLeft_toRightOf="@id/Time_show"
-        android:hint="Month"
+        android:hint="Month (e.g Jan)"
         android:inputType="text">
     </EditText>
 
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/input_venue"
         app:layout_constraintLeft_toRightOf="@id/input_month"
-        android:hint="Date"
+        android:hint="Date (e.g 03)"
         android:inputType="text">
     </EditText>
 
@@ -65,24 +65,28 @@
         android:id="@+id/input_hours"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/input_venue"
-        app:layout_constraintLeft_toRightOf="@id/input_date"
-        android:hint="Hours"
+        app:layout_constraintTop_toBottomOf="@id/Time_show"
+        app:layout_constraintLeft_toRightOf="@id/Time_show"
+        android:hint="Hours (e.g 09.00)"
         android:inputType="text">
     </EditText>
 
     <EditText
         android:id="@+id/input_AM_or_PM"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/input_hours"
+        app:layout_constraintTop_toBottomOf="@id/Time_show"
+        android:hint="AM/PM"
+        android:inputType="text"/>
 
     <EditText
         android:id="@+id/input_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/input_month"
+        app:layout_constraintTop_toBottomOf="@id/input_hours"
         android:hint="Description"
-        android:inputType="text"/>
+        android:inputType="textMultiLine"/>
 
     <EditText
         android:id="@+id/input_filled"
@@ -98,7 +102,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/input_filled"
-        android:hint="Maximum party size"/>
+        android:hint="Maximum party size"
+        android:inputType="text"/>
 
     <Button
         android:id="@+id/host_button"

@@ -63,7 +63,10 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new fragment_enrolled();
                         break;
                     case 2:
+                        break;
+                    case 3:
                         fragment = new fragment_view_Account();
+                        break;
                 }
                 displaySelectedScreen(fragment);
             }

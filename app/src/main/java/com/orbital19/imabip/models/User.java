@@ -13,6 +13,8 @@ public class User implements Serializable {
     public static String phoneKey = "Phone";
     public static String idKey = "ID";
     public static String enrolledKey = "Enrolled";
+    public static String hostingKey = "Hosting";
+
 
     private String email;
     private String name;
