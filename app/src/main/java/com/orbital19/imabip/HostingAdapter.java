@@ -2,33 +2,28 @@ package com.orbital19.imabip;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class EnrolledAdapter extends ArrayAdapter<Event> {
+class HostingAdapter extends ArrayAdapter<Event> {
 
     private final Context context;
     private final List<Event> values;
 
-    public EnrolledAdapter(Context contxt, List<Event> vals) {
+    public HostingAdapter(Context contxt, List<Event> vals) {
         super(contxt, R.layout.details_enrolled_list_row, vals);
         this.context = contxt;
         this.values = vals;
@@ -38,27 +33,27 @@ public class EnrolledAdapter extends ArrayAdapter<Event> {
     public View getView(int position, View convertView, ViewGroup container) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.details_enrolled_list_row, container, false);
+        View rowView = inflater.inflate(R.layout.details_hosting_list_row, container, false);
 
-        TextView nameTV = rowView.findViewById(R.id.eventName_enrolled);
-        TextView hostTV = rowView.findViewById(R.id.hostID_enrolled);
-        TextView paxTV = rowView.findViewById(R.id.pax_enrolled);
-        TextView timeTV = rowView.findViewById(R.id.time_enrolled);
-        TextView dropTV = rowView.findViewById(R.id.drop_ev);
+        TextView nameTV = rowView.findViewById(R.id.eventName_hosting);
+        TextView hostTV = rowView.findViewById(R.id.hostID_hosting);
+        TextView paxTV = rowView.findViewById(R.id.pax_hosting);
+        TextView timeTV = rowView.findViewById(R.id.time_hosting);
+        TextView cancelTV = rowView.findViewById(R.id.cancel_ev);
 
         final Event cur = values.get(position);
 
-        dropTV.setOnClickListener(new View.OnClickListener() {
+        cancelTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
 
                 db.collection(User.usersCollection).document(currentUser.getEmail())
-                        .update(User.enrolledKey, FieldValue.arrayRemove(cur.getID()));
+                        .update(User.hostingKey, FieldValue.arrayRemove(cur.getID()));
 
                 db.collection(Event.availableEventCollection).document(cur.getID())
-                        .update(Event.enrolledKey, FieldValue.increment(-1));
+                        .delete();
 
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 getContext().startActivity(intent);

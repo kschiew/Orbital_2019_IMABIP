@@ -124,7 +124,8 @@ public class fragment_eventList extends Fragment {
                             (String) doc.get(Event.evTimeKey), (Long) doc.get(Event.partySizeKey),
                             (Long) doc.get(Event.enrolledKey));
 
-                    events.add(EV);
+                    if (!EV.getContact().get(0).equals(user.getEmail()))
+                        events.add(EV);
                 }
 
                 eventAdapter.notifyDataSetChanged();
