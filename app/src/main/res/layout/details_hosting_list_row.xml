@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/eventName_hosting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:text="Event name"
+        app:layout_constraintBottom_toTopOf="@id/time_hosting"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/time_hosting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:text="Date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eventName_hosting" />
+
+    <TextView
+        android:id="@+id/hostID_hosting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HostID"
+        android:paddingLeft="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/time_hosting" />
+
+    <TextView
+        android:id="@+id/pax_hosting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="pax"
+        android:paddingLeft="300dp"
+        android:paddingRight="16dp"
+        app:layout_constraintTop_toBottomOf="@id/time_hosting"
+        app:layout_constraintLeft_toRightOf="@id/hostID_hosting"/>
+
+    <TextView
+        android:id="@+id/cancel_ev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:text="cancel"
+        android:textColor="@color/Red"
+        app:layout_constraintTop_toBottomOf="@id/hostID_hosting"
+        app:layout_constraintStart_toStartOf="parent"/>
+</android.support.constraint.ConstraintLayout>

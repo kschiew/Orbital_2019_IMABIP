@@ -13,6 +13,8 @@ public class User implements Serializable {
     public static String phoneKey = "Phone";
     public static String idKey = "ID";
     public static String enrolledKey = "Enrolled";
+    public static String hostingKey = "Hosting";
+
 
     private String email;
     private String name;
@@ -38,28 +40,9 @@ public class User implements Serializable {
         map.put(phoneKey, phone);
         map.put(idKey, ID);
         map.put(enrolledKey, enrolled);
+        map.put(hostingKey, new ArrayList<String>());
 
         db.collection(usersCollection).document(email).set(map);
-    }
-
-    public void enroll(Event event) {
-        enrolled.add(event.getID());
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection(usersCollection).document(email).update(enrolledKey, enrolled);
-
-        event.partyUp(this);
-    }
-
-    public void drop(Event event) {
-        enrolled.remove(event.getID());
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection(usersCollection).document(email).update(enrolledKey, enrolled);
-
-        event.partyDown(this);
     }
 
     public String getID() {

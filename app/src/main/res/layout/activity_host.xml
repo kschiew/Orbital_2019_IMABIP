@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Event name"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="text"/>
 
     <EditText
         android:id="@+id/input_type"
@@ -25,21 +26,67 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/input_type"
-        android:hint="Venue"/>
+        android:hint="Venue"
+        android:inputType="text"/>
+
+    <TextView
+        android:id="@+id/Time_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="30dp"
+        android:text="Time: "
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/input_month"
+        app:layout_constraintRight_toLeftOf="@id/input_month"
+        app:layout_constraintTop_toTopOf="@+id/input_month" />
 
     <EditText
-        android:id="@+id/input_time"
-        android:layout_width="match_parent"
+        android:id="@+id/input_month"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/input_venue"
-        android:hint="Time"/>
+        app:layout_constraintLeft_toRightOf="@id/Time_show"
+        android:hint="Month (e.g Jan)"
+        android:inputType="text">
+    </EditText>
+
+    <EditText
+        android:id="@+id/input_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/input_venue"
+        app:layout_constraintLeft_toRightOf="@id/input_month"
+        android:hint="Date (e.g 03)"
+        android:inputType="text">
+    </EditText>
+
+    <EditText
+        android:id="@+id/input_hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/Time_show"
+        app:layout_constraintLeft_toRightOf="@id/Time_show"
+        android:hint="Hours (e.g 09.00)"
+        android:inputType="text">
+    </EditText>
+
+    <EditText
+        android:id="@+id/input_AM_or_PM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/input_hours"
+        app:layout_constraintTop_toBottomOf="@id/Time_show"
+        android:hint="AM/PM"
+        android:inputType="text"/>
 
     <EditText
         android:id="@+id/input_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/input_time"
-        android:hint="Description"/>
+        app:layout_constraintTop_toBottomOf="@id/input_hours"
+        android:hint="Description"
+        android:inputType="textMultiLine"/>
 
     <EditText
         android:id="@+id/input_filled"
@@ -47,14 +94,16 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/input_description"
         app:layout_constraintLeft_toLeftOf="@id/input_pax"
-        android:hint="No. of participants"/>
+        android:hint="No. of participants"
+        android:inputType="text"/>
 
     <EditText
         android:id="@+id/input_pax"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/input_filled"
-        android:hint="Maximum party size"/>
+        android:hint="Maximum party size"
+        android:inputType="text"/>
 
     <Button
         android:id="@+id/host_button"

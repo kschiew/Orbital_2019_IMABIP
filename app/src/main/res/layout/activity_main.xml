@@ -32,13 +32,19 @@
             android:id="@+id/view_event_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Events"/>
+            android:text="Games"/>
 
         <android.support.design.widget.TabItem
             android:id="@+id/view_enrolled_events"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Enrolled" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/view_hosting_events"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hosting" />
 
         <android.support.design.widget.TabItem
             android:id="@+id/view_account"
