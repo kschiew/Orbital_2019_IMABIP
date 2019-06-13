@@ -12,14 +12,17 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.models.User;
 import com.orbital19.imabip.ui.login.LoginActivity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
@@ -28,9 +31,7 @@ public class SignupActivity extends AppCompatActivity {
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference ref = database.getReference();
-    private DatabaseReference usersRef = ref.child("Users");
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class SignupActivity extends AppCompatActivity {
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         btnSignIn = (Button) findViewById(R.id.sign_in_button);
         btnSignUp = (Button) findViewById(R.id.sign_up_button);
@@ -46,6 +48,11 @@ public class SignupActivity extends AppCompatActivity {
         inputPassword = (EditText) findViewById(R.id.password);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         btnResetPassword = (Button) findViewById(R.id.btn_reset_password);
+
+        inputName = (EditText) findViewById(R.id.etName);
+        inputUserID = (EditText) findViewById(R.id.etID);
+        inputPhone = (EditText) findViewById(R.id.etPhone);
+
 
 /*        btnResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +100,20 @@ public class SignupActivity extends AppCompatActivity {
                 String phone = inputPhone.getText().toString();
                 String userID = inputUserID.getText().toString();
                 HashMap<String, Object> user = new HashMap<>();
-                user.put()
+                user.put("Email", email);
+                user.put("ID", userID);
+                user.put("Name", name);
+                user.put("Phone", phone);
+                user.put("Enrolled", new ArrayList<>());
+                user.put("Host", new ArrayList<>());
+
+                db.collection("Users").document(email).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                    }
+                });
+
+
                 //create user
                 auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
