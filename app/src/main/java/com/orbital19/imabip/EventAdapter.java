@@ -1,16 +1,25 @@
 package com.orbital19.imabip;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.models.Event;
+import com.orbital19.imabip.models.User;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,8 +43,9 @@ public class EventAdapter extends ArrayAdapter<Event> {
         TextView hostTV = rowView.findViewById(R.id.hostID);
         TextView paxTV = rowView.findViewById(R.id.pax);
         TextView timeTV = rowView.findViewById(R.id.time);
+        final TextView joinedTV = rowView.findViewById(R.id.joined);
 
-        Event cur = values.get(position);
+        final Event cur = values.get(position);
 
         nameTV.setText(cur.getName());
         hostTV.setText(cur.getHost());
@@ -43,6 +53,20 @@ public class EventAdapter extends ArrayAdapter<Event> {
         String pax = String.format(Locale.getDefault(),
                 "%d / %d", cur.getEnrolled(), cur.getPartySize());
         paxTV.setText(pax);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore.getInstance().collection(User.usersCollection).document(user.getEmail())
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                ArrayList<String> lst = (ArrayList<String>) task.getResult().get(User.enrolledKey);
+
+                if (lst.contains(cur.getID()))
+                    joinedTV.setVisibility(View.VISIBLE);
+                else
+                    joinedTV.setVisibility(View.INVISIBLE);
+            }
+        });
 
 
         return rowView;

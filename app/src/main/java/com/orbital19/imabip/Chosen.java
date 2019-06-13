@@ -50,10 +50,11 @@ public class Chosen extends AppCompatActivity {
         TextView venueTV = view.findViewById(R.id.ev_venue);
         TextView descriptionTV = view.findViewById(R.id.ev_description);
         TextView partyTV = view.findViewById(R.id.ev_party);
+        final TextView joinedSignTV = view.findViewById(R.id.joined_sign);
 
         nameTV.setText(ev.getName());
         hostTV.setText(ev.getHost());
-        timeTV.setText(ev.getTime().toString());
+        timeTV.setText(ev.getTime());
         venueTV.setText(ev.getVenue());
         descriptionTV.setText(ev.getDescription());
         partyTV.setText(String.format(Locale.getDefault(),
@@ -72,11 +73,29 @@ public class Chosen extends AppCompatActivity {
 
                 DocumentReference event = db.collection(Event.availableEventCollection).document(ev.getID());
                 event.update(Event.enrolledKey, FieldValue.increment(1));
+                event.update(Event.playersKey, FieldValue.arrayUnion(current.getEmail()));
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
 
                 finish();
+            }
+        });
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore.getInstance().collection(User.usersCollection).document(user.getEmail())
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                ArrayList<String> lst = (ArrayList<String>) task.getResult().get(User.enrolledKey);
+
+                if (lst.contains(ev.getID())) {
+                    joinedSignTV.setVisibility(View.VISIBLE);
+                    toJoin.setVisibility(View.GONE);
+                } else {
+                    joinedSignTV.setVisibility(View.GONE);
+                    toJoin.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
