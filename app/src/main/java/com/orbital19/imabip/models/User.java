@@ -30,6 +30,10 @@ public class User implements Serializable {
         enrolled = new ArrayList<>();
     }
 
+    public User(String ID, String name, String phone) {
+
+    }
+
     public void createEntry() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 

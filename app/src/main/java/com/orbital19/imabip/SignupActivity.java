@@ -15,14 +15,22 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.orbital19.imabip.models.User;
 import com.orbital19.imabip.ui.login.LoginActivity;
+
+import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private EditText inputEmail, inputPassword;
+    private EditText inputEmail, inputPassword, inputName, inputPhone, inputUserID;
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference ref = database.getReference();
+    private DatabaseReference usersRef = ref.child("Users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +88,12 @@ public class SignupActivity extends AppCompatActivity {
                 }
 
                 progressBar.setVisibility(View.VISIBLE);
+                //create user details in database
+                String name = inputName.getText().toString();
+                String phone = inputPhone.getText().toString();
+                String userID = inputUserID.getText().toString();
+                HashMap<String, Object> user = new HashMap<>();
+                user.put()
                 //create user
                 auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {

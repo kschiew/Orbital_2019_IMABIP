@@ -25,7 +25,7 @@
     <string name="title_activity_login">Sign in</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
-    <string name="hint_name">Fullname</string>
+    <string name="hint_name">Full name</string>
     <string name="btn_login">LOGIN</string>
     <string name="btn_link_to_register">Not a member? Get registered in Firebase now!</string>
     <string name="btn_link_to_login">Already registered. Login Me!</string>
@@ -40,9 +40,11 @@
     <string name="btn_sign_out">Sign Out</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
-
-
+    <string name="user_details_header">Your Info</string>
+    <string name="user_details_name">Your name: %s</string>
+    <string name="user_details_phone">Your phone number: %s</string>
+    <string name="user_details_id">Your id: %s</string>
     <string name="hint_month_for_game">Jan</string>
     <string name="hint_date_for_game">01</string>
-    W
 </resources>
+
