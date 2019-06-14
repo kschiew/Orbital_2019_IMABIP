@@ -11,9 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".UserDetailsActivity"></activity>
         <activity android:name=".edits.EditUserActivity"></activity>
-        <activity android:name=".edits.EditHostActivity" />
         <activity
             android:name=".models.user.DisplayUser"
             android:parentActivityName=".MainActivity" />
@@ -23,9 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Chosen" />
-        <activity
-            android:name=".Host"
         <activity
             android:name=".Chosen"
             android:parentActivityName=".MainActivity" />
@@ -34,7 +31,6 @@
             android:parentActivityName=".MainActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".ui.login.LoginActivity"></activity>
-        <activity android:name=".ui.login.LoginActivity" />
     </application>
 
 </manifest>

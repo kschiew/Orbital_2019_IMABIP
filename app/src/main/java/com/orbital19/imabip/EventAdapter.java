@@ -59,12 +59,15 @@ public class EventAdapter extends ArrayAdapter<Event> {
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                joinedTV.setVisibility(View.VISIBLE);
+/*
                 ArrayList<String> lst = (ArrayList<String>) task.getResult().get(User.enrolledKey);
 
                 if (lst.contains(cur.getID()))
                     joinedTV.setVisibility(View.VISIBLE);
                 else
                     joinedTV.setVisibility(View.INVISIBLE);
+                    */
             }
         });
 

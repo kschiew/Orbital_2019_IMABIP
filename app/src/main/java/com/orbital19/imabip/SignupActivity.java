@@ -83,9 +83,9 @@ public class SignupActivity extends AppCompatActivity {
                 String password = inputPassword.getText().toString().trim();
                 //create user details in database
                 String name = inputName.getText().toString();
-                String phone = inputPhone.getText().toString();
+                String phonenum = inputPhone.getText().toString();
                 String userID = inputUserID.getText().toString();
-                User user =  new User(email, name, phone, userID);
+                User user =  new User(email, name, phonenum, userID);
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
