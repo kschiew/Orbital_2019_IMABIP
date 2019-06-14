@@ -20,14 +20,12 @@ public class User implements Serializable {
     private String name;
     private String phone;
     private String ID;
-    private ArrayList<String> enrolled;
 
     public User(String email, String name, String phone, String ID) {
         this.email = email;
         this.name = name;
         this.phone = phone;
         this.ID = ID;
-        enrolled = new ArrayList<>();
     }
 
     public void createEntry() {
@@ -39,7 +37,7 @@ public class User implements Serializable {
         map.put(nameKey, name);
         map.put(phoneKey, phone);
         map.put(idKey, ID);
-        map.put(enrolledKey, enrolled);
+        map.put(enrolledKey, new ArrayList<String>());
         map.put(hostingKey, new ArrayList<String>());
 
         db.collection(usersCollection).document(email).set(map);
@@ -47,5 +45,17 @@ public class User implements Serializable {
 
     public String getID() {
         return ID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 }

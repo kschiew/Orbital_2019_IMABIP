@@ -4,15 +4,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.orbital19.imabip.models.User;
+import com.orbital19.imabip.models.user.DisplayUser;
 
 public class fragment_view_Account extends Fragment {
+
+    private TextView viewAccount, viewHistory, viewSettings;
 
     private Button signOutBtn;
 
@@ -31,7 +42,31 @@ public class fragment_view_Account extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_view_account, container, false);
 
+        viewAccount = view.findViewById(R.id.view_my_account);
+        viewHistory = view.findViewById(R.id.view_history);
+        viewSettings = view.findViewById(R.id.view_settings);
         signOutBtn = view.findViewById(R.id.sign_out_button);
+
+        viewAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                FirebaseFirestore.getInstance().collection(User.usersCollection).document(user.getEmail())
+                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        DocumentSnapshot doc = task.getResult();
+                        User user = new User((String) doc.get(User.emailKey), (String) doc.get(User.nameKey),
+                                (String) doc.get(User.phoneKey), (String) doc.get(User.idKey));
+
+                        Intent intent = new Intent(getContext(), DisplayUser.class);
+                        intent.putExtra("toViewUser", user);
+                        startActivity(intent);
+                    }
+                });
+            }
+        });
 
         signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override

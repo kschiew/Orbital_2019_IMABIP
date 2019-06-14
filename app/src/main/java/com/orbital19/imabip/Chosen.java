@@ -18,6 +18,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.orbital19.imabip.edits.EditHostActivity;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
@@ -26,7 +27,7 @@ import java.util.Locale;
 
 public class Chosen extends AppCompatActivity {
 
-    private Button toJoin;
+    private Button toJoin, toEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,22 +83,41 @@ public class Chosen extends AppCompatActivity {
             }
         });
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseFirestore.getInstance().collection(User.usersCollection).document(user.getEmail())
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                ArrayList<String> lst = (ArrayList<String>) task.getResult().get(User.enrolledKey);
+        toEdit = findViewById(R.id.ev_edit);
 
-                if (lst.contains(ev.getID())) {
-                    joinedSignTV.setVisibility(View.VISIBLE);
-                    toJoin.setVisibility(View.GONE);
-                } else {
-                    joinedSignTV.setVisibility(View.GONE);
-                    toJoin.setVisibility(View.VISIBLE);
-                }
+        toEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), EditHostActivity.class);
+                intent.putExtra("toEditEvent", ev);
+                startActivity(intent);
+
+                finish();
             }
         });
+
+        if (bundle.getBoolean("hosting")) {
+            joinedSignTV.setVisibility(View.GONE);
+            toJoin.setVisibility(View.GONE);
+            toEdit.setVisibility(View.VISIBLE);
+        } else {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            FirebaseFirestore.getInstance().collection(User.usersCollection).document(user.getEmail())
+                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    ArrayList<String> lst = (ArrayList<String>) task.getResult().get(User.enrolledKey);
+
+                    if (lst.contains(ev.getID())) {
+                        joinedSignTV.setVisibility(View.VISIBLE);
+                        toJoin.setVisibility(View.GONE);
+                    } else {
+                        joinedSignTV.setVisibility(View.GONE);
+                        toJoin.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+        }
     }
 
 
