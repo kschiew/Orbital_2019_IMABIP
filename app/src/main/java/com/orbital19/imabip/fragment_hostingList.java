@@ -2,12 +2,14 @@ package com.orbital19.imabip;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,6 +52,17 @@ public class fragment_hostingList extends Fragment {
 
         list_View = view.findViewById(R.id.host_list_view);
         list_View.setAdapter(hostingAdapter);
+
+        list_View.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Event ev = (Event) parent.getItemAtPosition(position);
+                Intent intent = new Intent(getContext(), Chosen.class);
+                intent.putExtra("Event", ev);
+                intent.putExtra("hosting", true);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }

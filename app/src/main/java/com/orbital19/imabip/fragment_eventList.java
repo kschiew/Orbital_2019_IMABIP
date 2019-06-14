@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -112,9 +113,9 @@ public class fragment_eventList extends Fragment {
                 // clean up the list to prevent double copies
                 events.removeAll(events);
 
+
                 for (DocumentSnapshot doc : documents) {
                     // filter the enrolled event
-
 
 
                     // should perform checking
@@ -123,6 +124,8 @@ public class fragment_eventList extends Fragment {
                             (String) doc.get(Event.typeKey), (String) doc.get(Event.venueKey),
                             (String) doc.get(Event.evTimeKey), (Long) doc.get(Event.partySizeKey),
                             (Long) doc.get(Event.enrolledKey));
+
+
 
                     if (!EV.getContact().get(0).equals(user.getEmail()))
                         events.add(EV);

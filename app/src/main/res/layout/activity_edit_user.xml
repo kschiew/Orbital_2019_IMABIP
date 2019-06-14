@@ -1,44 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment_view_Account"
-    android:orientation="vertical">
+    tools:context=".models.user.DisplayUser"
+    android:orientation="vertical"
+    android:id="@+id/user_info_edit">
 
     <TextView
-        android:id="@+id/view_my_account"
+        android:id="@+id/user_Name_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:paddingLeft="16dp"
+        android:text="Name"
         android:paddingTop="16dp"
-        android:text="View account"/>
+        android:paddingLeft="16dp"/>
 
     <TextView
-        android:id="@+id/view_history"
+        android:id="@+id/user_ID_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:paddingLeft="16dp"
+        android:text="ID"
         android:paddingTop="16dp"
-        android:text="History"/>
+        android:paddingLeft="16dp"/>
 
     <TextView
-        android:id="@+id/view_settings"
+        android:id="@+id/user_Email_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:paddingLeft="16dp"
+        android:text="Email"
         android:paddingTop="16dp"
-        android:text="Settings"/>
+        android:paddingLeft="16dp"/>
+
+    <EditText
+        android:id="@+id/user_Phone_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:hint="Phone"
+        android:paddingTop="16dp"
+        android:paddingLeft="16dp"/>
 
     <Button
-        android:id="@+id/sign_out_button"
+        android:id="@+id/done_edit_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign out"
+        android:text="Done"
         android:gravity="center"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

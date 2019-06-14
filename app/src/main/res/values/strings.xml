@@ -48,5 +48,15 @@
     <string name="user_details_id">Your id: %s</string>
     <string name="hint_month_for_game">Jan</string>
     <string name="hint_date_for_game">01</string>
-</resources>
+    <string name="name_title">Name</string>
+    <string name="id_title">ID</string>
+    <string name="email_title">Email</string>
+    <string name="phone_title">Phone</string>
 
+
+    <string name="name_title">Name</string>
+    <string name="id_title">ID</string>
+    <string name="email_title">Email</string>
+    <string name="phone_title">Phone</string>
+    W
+</resources>

@@ -60,6 +60,9 @@ public class EnrolledAdapter extends ArrayAdapter<Event> {
                 db.collection(Event.availableEventCollection).document(cur.getID())
                         .update(Event.enrolledKey, FieldValue.increment(-1));
 
+                db.collection(Event.availableEventCollection).document(cur.getID())
+                        .update(Event.playersKey, FieldValue.arrayRemove(currentUser.getEmail()));
+
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 getContext().startActivity(intent);
             }

@@ -1,4 +1,4 @@
-package com.orbital19.imabip;
+package com.orbital19.imabip.edits;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
 import com.google.android.gms.common.util.Strings;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,15 +18,19 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.orbital19.imabip.MainActivity;
+import com.orbital19.imabip.R;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
-import io.opencensus.internal.StringUtils;
 
-
-public class Host extends AppCompatActivity {
+/*
+    A clone of Host class, with info filled from the viewing chosen game
+ */
+public class EditHostActivity extends AppCompatActivity {
     private EditText inName, inType, inVenue, inMonth, inDate, inHours, inAMorPM, inDesc, inFilled, inPax;
     private Button hostBtn;
     private String[] inputs = new String[10];
@@ -42,6 +45,8 @@ public class Host extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setTitle("Start a game!");
 
+        Intent intent = this.getIntent();
+        final Event event = (Event) intent.getExtras().getSerializable("toEditEvent");
 
         inName = findViewById(R.id.input_name);
         inType = findViewById(R.id.input_type);
@@ -53,6 +58,18 @@ public class Host extends AppCompatActivity {
         inDesc = findViewById(R.id.input_description);
         inFilled = findViewById(R.id.input_filled);
         inPax = findViewById(R.id.input_pax);
+
+        inName.setText(event.getName());
+        inType.setText(event.getType());
+        inVenue.setText(event.getVenue());
+        String time = event.getTime();
+        inMonth.setText(time.substring(0, 3));
+        inDate.setText(time.substring(4, 6)); // Jun 12 at 09.00AM
+        inHours.setText(time.substring(10,15));
+        inAMorPM.setText(time.substring(15));
+        inDesc.setText(event.getDescription());
+        inFilled.setText(String.format(Locale.getDefault(),"%d", event.getEnrolled()));
+        inPax.setText(String.format(Locale.getDefault(), "%d", event.getPartySize()));
 
 
         hostBtn = findViewById(R.id.host_button);
@@ -71,13 +88,14 @@ public class Host extends AppCompatActivity {
                 inputs[8] = inFilled.getText().toString();
                 inputs[9] = inPax.getText().toString();
 
-                validate();
+                validate(event);
+
             }
         });
     }
 
 
-    private void validate() {
+    private void validate(Event event) {
         if (Strings.isEmptyOrWhitespace(inputs[0])) {
             Toast.makeText(getApplicationContext(), "Invalid game name", Toast.LENGTH_SHORT).show();
         } else if (Strings.isEmptyOrWhitespace(inputs[1])) {
@@ -104,6 +122,11 @@ public class Host extends AppCompatActivity {
                 || !inputs[9].matches("[0-9]+")) {
             Toast.makeText(getApplicationContext(), "Invalid party size", Toast.LENGTH_SHORT).show();
         } else {
+            FirebaseFirestore.getInstance().collection(Event.availableEventCollection).document(event.getID()).delete();
+            FirebaseFirestore.getInstance().collection(User.usersCollection)
+                    .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                    .update(User.hostingKey, FieldValue.arrayRemove(event.getID()));
+
             addNewEvent();
             addedToast();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -146,6 +169,8 @@ public class Host extends AppCompatActivity {
 
                 fs.collection(User.usersCollection).document(currentUser.getEmail())
                         .update(User.hostingKey, FieldValue.arrayUnion(ev.getID()));
+
+
             }
         });
 
@@ -155,8 +180,6 @@ public class Host extends AppCompatActivity {
 
     private void addedToast() {
         Toast.makeText(getApplicationContext(), "Game hosted successfully!", Toast.LENGTH_LONG)
-            .show();
+                .show();
     }
 }
-
-
