@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -27,6 +29,7 @@ import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
 
+    private static final String TAG = "SignupActivity";
     private EditText inputEmail, inputPassword, inputName, inputPhone, inputUserID;
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
@@ -78,6 +81,11 @@ public class SignupActivity extends AppCompatActivity {
 
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
+                //create user details in database
+                String name = inputName.getText().toString();
+                String phone = inputPhone.getText().toString();
+                String userID = inputUserID.getText().toString();
+                User user =  new User(email, name, phone, userID);
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
@@ -95,23 +103,24 @@ public class SignupActivity extends AppCompatActivity {
                 }
 
                 progressBar.setVisibility(View.VISIBLE);
-                //create user details in database
-                String name = inputName.getText().toString();
-                String phone = inputPhone.getText().toString();
-                String userID = inputUserID.getText().toString();
-                HashMap<String, Object> user = new HashMap<>();
-                user.put("Email", email);
-                user.put("ID", userID);
-                user.put("Name", name);
-                user.put("Phone", phone);
-                user.put("Enrolled", new ArrayList<>());
-                user.put("Host", new ArrayList<>());
 
-                db.collection("Users").document(email).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                    }
-                });
+                //user.put("Host", new ArrayList<>());
+
+                db.collection("Users").document(email).set(user)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(SignupActivity.this, "Entry saved", Toast.LENGTH_SHORT ).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(SignupActivity.this, "Entry failed", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, e.toString());
+
+                            }
+                        });
 
 
                 //create user
@@ -119,7 +128,7 @@ public class SignupActivity extends AppCompatActivity {
                         .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                Toast.makeText(SignupActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(SignupActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
                                 // If sign in fails, display a message to the user. If sign in succeeds
                                 // the auth state listener will be notified and logic to handle the

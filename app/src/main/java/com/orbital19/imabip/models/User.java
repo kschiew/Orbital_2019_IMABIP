@@ -30,8 +30,8 @@ public class User implements Serializable {
         enrolled = new ArrayList<>();
     }
 
-    public User(String ID, String name, String phone) {
-
+    public User() {
+        //No arg constructor needed
     }
 
     public void createEntry() {
