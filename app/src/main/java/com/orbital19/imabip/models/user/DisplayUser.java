@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.orbital19.imabip.R;
+import com.orbital19.imabip.edits.EditUserActivity;
 import com.orbital19.imabip.models.User;
 
 public class DisplayUser extends AppCompatActivity {
@@ -45,5 +46,15 @@ public class DisplayUser extends AppCompatActivity {
         userIDTV.setText(detail2);
         userEmailTV.setText(detail3);
         userPhoneTV.setText(detail4);
+
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(getApplicationContext(), EditUserActivity.class);
+                intent1.putExtra("toEditUser", user);
+
+                startActivity(intent1);
+            }
+        });
     }
 }

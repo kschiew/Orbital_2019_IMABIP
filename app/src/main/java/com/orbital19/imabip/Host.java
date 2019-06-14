@@ -146,9 +146,6 @@ public class Host extends AppCompatActivity {
 
                 fs.collection(User.usersCollection).document(currentUser.getEmail())
                         .update(User.hostingKey, FieldValue.arrayUnion(ev.getID()));
-
-                fs.notify();
-
             }
         });
 

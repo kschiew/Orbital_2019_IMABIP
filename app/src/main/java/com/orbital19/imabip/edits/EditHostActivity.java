@@ -123,6 +123,10 @@ public class EditHostActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Invalid party size", Toast.LENGTH_SHORT).show();
         } else {
             FirebaseFirestore.getInstance().collection(Event.availableEventCollection).document(event.getID()).delete();
+            FirebaseFirestore.getInstance().collection(User.usersCollection)
+                    .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                    .update(User.hostingKey, FieldValue.arrayRemove(event.getID()));
+
             addNewEvent();
             addedToast();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));

@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".edits.EditHostActivity"></activity>
+        <activity android:name=".edits.EditUserActivity"></activity>
+        <activity android:name=".edits.EditHostActivity" />
         <activity
             android:name=".models.user.DisplayUser"
             android:parentActivityName=".MainActivity" />

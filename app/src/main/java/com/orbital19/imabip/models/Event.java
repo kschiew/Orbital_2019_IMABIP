@@ -52,7 +52,8 @@ public class Event implements Serializable {
         EvTime = time;
         PartySize = size;
         Enrolled = enrolled;
-        ID = Contact.get(0).substring(0, 6) + Contact.get(1).substring(0, 4);
+        ID = Contact.get(0).substring(0, 6) + host + time.substring(0,3)
+                + time.substring(4,6) + time.substring(10,15) + time.substring(15) + type + venue;
         Players = new ArrayList<>();
     }
 
@@ -81,6 +82,7 @@ public class Event implements Serializable {
         event.put(evTimeKey, EvTime);
         event.put(partySizeKey, PartySize);
         event.put(enrolledKey, Enrolled);
+        event.put(idKey, ID);
 
         db.collection(availableEventCollection).document(ID).set(event);
     }
