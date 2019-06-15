@@ -17,8 +17,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -60,14 +58,14 @@ public class EventAdapter extends ArrayAdapter<Event> {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 joinedTV.setVisibility(View.VISIBLE);
-/*
+
                 ArrayList<String> lst = (ArrayList<String>) task.getResult().get(User.enrolledKey);
 
                 if (lst.contains(cur.getID()))
                     joinedTV.setVisibility(View.VISIBLE);
                 else
                     joinedTV.setVisibility(View.INVISIBLE);
-                    */
+
             }
         });
 
