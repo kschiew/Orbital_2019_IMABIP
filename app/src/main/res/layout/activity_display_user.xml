@@ -50,6 +50,7 @@
         android:layout_height="wrap_content"
         android:text="edit"
         android:gravity="center"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
 
 </LinearLayout>

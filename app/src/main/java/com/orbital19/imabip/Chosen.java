@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.edits.EditHostActivity;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
+import com.orbital19.imabip.models.user.DisplayUser;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -49,12 +50,33 @@ public class Chosen extends AppCompatActivity {
         TextView hostTV = view.findViewById(R.id.ev_host);
         TextView timeTV = view.findViewById(R.id.ev_time);
         TextView venueTV = view.findViewById(R.id.ev_venue);
-        TextView descriptionTV = view.findViewById(R.id.ev_description);
+        final TextView descriptionTV = view.findViewById(R.id.ev_description);
         TextView partyTV = view.findViewById(R.id.ev_party);
         final TextView joinedSignTV = view.findViewById(R.id.joined_sign);
 
         nameTV.setText(ev.getName());
         hostTV.setText(ev.getHost());
+        hostTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseFirestore.getInstance().collection(User.usersCollection).document(ev.getContact().get(0))
+                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        DocumentSnapshot doc = task.getResult();
+                        User user = new User((String) doc.get(User.emailKey), (String) doc.get(User.nameKey),
+                                (String) doc.get(User.phoneKey), (String) doc.get(User.idKey));
+
+                        Intent intent = new Intent(getApplicationContext(), DisplayUser.class);
+
+                        intent.putExtra("toViewUser", user);
+                        startActivity(intent);
+
+                        finish();
+                    }
+                });
+            }
+        });
         timeTV.setText(ev.getTime());
         venueTV.setText(ev.getVenue());
         descriptionTV.setText(ev.getDescription());

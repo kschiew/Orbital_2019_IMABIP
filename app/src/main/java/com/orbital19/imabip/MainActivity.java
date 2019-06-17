@@ -29,10 +29,10 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setTitle("Home screen");
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(false);
+        getSupportActionBar().setTitle("HOME");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

@@ -47,6 +47,11 @@ public class DisplayUser extends AppCompatActivity {
         userEmailTV.setText(detail3);
         userPhoneTV.setText(detail4);
 
+        if (user.getEmail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
+            editBtn.setVisibility(View.VISIBLE);
+        else
+            editBtn.setVisibility(View.GONE);
+
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
