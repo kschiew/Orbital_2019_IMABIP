@@ -41,13 +41,17 @@ public class EventAdapter extends ArrayAdapter<Event> {
         TextView hostTV = rowView.findViewById(R.id.hostID);
         TextView paxTV = rowView.findViewById(R.id.pax);
         TextView timeTV = rowView.findViewById(R.id.time);
+        TextView typeTV = rowView.findViewById(R.id.type);
+        TextView venueTV = rowView.findViewById(R.id.venue);
         final TextView joinedTV = rowView.findViewById(R.id.joined);
 
         final Event cur = values.get(position);
 
         nameTV.setText(cur.getName());
         hostTV.setText(cur.getHost());
+        typeTV.setText(cur.getType());
         timeTV.setText(cur.getTime());
+        venueTV.setText(cur.getVenue());
         String pax = String.format(Locale.getDefault(),
                 "%d / %d", cur.getEnrolled(), cur.getPartySize());
         paxTV.setText(pax);

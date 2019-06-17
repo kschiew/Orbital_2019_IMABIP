@@ -40,6 +40,8 @@ class HostingAdapter extends ArrayAdapter<Event> {
         TextView paxTV = rowView.findViewById(R.id.pax_hosting);
         TextView timeTV = rowView.findViewById(R.id.time_hosting);
         TextView cancelTV = rowView.findViewById(R.id.cancel_ev);
+        TextView typeTV = rowView.findViewById(R.id.type_hosting);
+        TextView venueTV = rowView.findViewById(R.id.venue_hosting);
 
         final Event cur = values.get(position);
 
@@ -66,6 +68,8 @@ class HostingAdapter extends ArrayAdapter<Event> {
         String pax = String.format(Locale.getDefault(),
                 "%d / %d", cur.getEnrolled(), cur.getPartySize());
         paxTV.setText(pax);
+        typeTV.setText(cur.getType());
+        venueTV.setText(cur.getVenue());
 
 
         return rowView;

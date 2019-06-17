@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Event implements Serializable {
+public class Event implements Serializable, Comparable<Event> {
 
     public static String availableEventCollection = "AvailableEvents";
     public static String contactKey = "Contact";
@@ -38,6 +38,7 @@ public class Event implements Serializable {
     private Long PartySize;
     private Long Enrolled;
     private ArrayList<String> Players;
+    private HashMap<String, Integer> monthValue = new HashMap<>();
 
 
     public Event(ArrayList<String> contact, String desc, String host, String name, String type, String venue,
@@ -52,8 +53,8 @@ public class Event implements Serializable {
         EvTime = time;
         PartySize = size;
         Enrolled = enrolled;
-        ID = Contact.get(0).substring(0, 6) + host + time.substring(0,3)
-                + time.substring(4,6) + time.substring(10,15) + time.substring(15) + type + venue;
+        ID = Contact.get(0).substring(0, 6) + host + time.substring(0, 3)
+                + time.substring(4, 6) + time.substring(10, 15) + time.substring(15) + type + venue;
         Players = new ArrayList<>();
     }
 
@@ -105,5 +106,52 @@ public class Event implements Serializable {
 
         db.collection(availableEventCollection).document(ID).update(enrolledKey, Enrolled);
         db.collection(availableEventCollection).document(ID).update(playersKey, Players);
+    }
+
+    private void setMonthsMap() {
+        monthValue.put("Jan", 1);
+        monthValue.put("Feb", 2);
+        monthValue.put("Mar", 3);
+        monthValue.put("Apr", 4);
+        monthValue.put("May", 5);
+        monthValue.put("Jun", 6);
+        monthValue.put("Jul", 7);
+        monthValue.put("Aug", 8);
+        monthValue.put("Sep", 9);
+        monthValue.put("Oct", 10);
+        monthValue.put("Nov", 11);
+        monthValue.put("Dec", 12);
+    }
+
+    public int compareTo(Event ev) {
+        setMonthsMap();
+
+        String s1 = this.EvTime;
+        String s2 = ev.EvTime;
+
+        if (!s1.substring(0, 3).equals(s2.substring(0, 3))) {
+            // different months
+            Integer m1 = monthValue.get(s1.substring(0, 3));
+            Integer m2 = monthValue.get(s2.substring(0, 3));
+            return m1 - m2;
+        } else {
+            // same month
+            Integer d1 = Integer.parseInt(s1.substring(4, 6));
+            Integer d2 = Integer.parseInt(s2.substring(4, 6));
+            if (!d1.equals(d2)) // different dates
+                return d1 - d2;
+            else { // same date
+                String h1 = s1.substring(10, 15);
+                String ap1 = s1.substring(15);
+                String h2 = s2.substring(10, 15);
+                String ap2 = s2.substring(15);
+                if (!ap1.equals(ap2))
+                    return ap1.compareTo(ap2);
+                else {
+                    return h1.compareTo(h2);
+                }
+            }
+        }
+
     }
 }

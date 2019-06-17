@@ -45,6 +45,8 @@ public class EnrolledAdapter extends ArrayAdapter<Event> {
         TextView paxTV = rowView.findViewById(R.id.pax_enrolled);
         TextView timeTV = rowView.findViewById(R.id.time_enrolled);
         TextView dropTV = rowView.findViewById(R.id.drop_ev);
+        TextView typeTV = rowView.findViewById(R.id.type_enrolled);
+        TextView venueTV = rowView.findViewById(R.id.venue_enrolled);
 
         final Event cur = values.get(position);
 
@@ -74,6 +76,8 @@ public class EnrolledAdapter extends ArrayAdapter<Event> {
         String pax = String.format(Locale.getDefault(),
                 "%d / %d", cur.getEnrolled(), cur.getPartySize());
         paxTV.setText(pax);
+        typeTV.setText(cur.getType());
+        venueTV.setText(cur.getVenue());
 
 
         return rowView;

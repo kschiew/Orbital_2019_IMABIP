@@ -22,6 +22,7 @@ import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -103,6 +104,8 @@ public class fragment_hostingList extends Fragment {
                                     (Long) doc.get(Event.enrolledKey));
 
                             events.add(EV);
+
+                            Collections.sort(events);
 
                             hostingAdapter.notifyDataSetChanged();
                         }
