@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:focusableInTouchMode="true"
             android:hint="@string/hint_phone"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="@android:color/white" />

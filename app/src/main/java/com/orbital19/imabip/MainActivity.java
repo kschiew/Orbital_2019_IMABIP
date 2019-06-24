@@ -89,6 +89,16 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            startActivity(new Intent(this, SignupActivity.class));
+            finish();
+        }
+    }
+
     private boolean displaySelectedScreen(Fragment fragment) {
         //switching fragment
         if (fragment != null) {

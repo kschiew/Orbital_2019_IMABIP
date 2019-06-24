@@ -38,7 +38,7 @@ public class Event implements Serializable, Comparable<Event> {
     private Long PartySize;
     private Long Enrolled;
     private ArrayList<String> Players;
-    private HashMap<String, Integer> monthValue = new HashMap<>();
+    private HashMap<String, Integer> monthValues = new HashMap<>();
 
 
     public Event(ArrayList<String> contact, String desc, String host, String name, String type, String venue,
@@ -108,7 +108,8 @@ public class Event implements Serializable, Comparable<Event> {
         db.collection(availableEventCollection).document(ID).update(playersKey, Players);
     }
 
-    private void setMonthsMap() {
+    public static HashMap<String, Integer> setMonthsMap() {
+        HashMap<String, Integer> monthValue = new HashMap<>();
         monthValue.put("Jan", 1);
         monthValue.put("Feb", 2);
         monthValue.put("Mar", 3);
@@ -121,18 +122,19 @@ public class Event implements Serializable, Comparable<Event> {
         monthValue.put("Oct", 10);
         monthValue.put("Nov", 11);
         monthValue.put("Dec", 12);
+        return monthValue;
     }
 
     public int compareTo(Event ev) {
-        setMonthsMap();
+        monthValues = setMonthsMap();
 
         String s1 = this.EvTime;
         String s2 = ev.EvTime;
 
         if (!s1.substring(0, 3).equals(s2.substring(0, 3))) {
             // different months
-            Integer m1 = monthValue.get(s1.substring(0, 3));
-            Integer m2 = monthValue.get(s2.substring(0, 3));
+            Integer m1 = monthValues.get(s1.substring(0, 3));
+            Integer m2 = monthValues.get(s2.substring(0, 3));
             return m1 - m2;
         } else {
             // same month

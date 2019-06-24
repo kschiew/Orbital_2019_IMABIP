@@ -104,23 +104,23 @@ public class SignupActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                //user.put("Host", new ArrayList<>());
+//                db.collection("Users").document(email).set(user)
+//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                            @Override
+//                            public void onSuccess(Void aVoid) {
+//                                Toast.makeText(SignupActivity.this, "Entry saved", Toast.LENGTH_SHORT ).show();
+//                            }
+//                        })
+//                        .addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Toast.makeText(SignupActivity.this, "Entry failed", Toast.LENGTH_SHORT).show();
+//                                Log.d(TAG, e.toString());
+//
+//                            }
+//                        });
 
-                db.collection("Users").document(email).set(user)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(SignupActivity.this, "Entry saved", Toast.LENGTH_SHORT ).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(SignupActivity.this, "Entry failed", Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, e.toString());
-
-                            }
-                        });
+                user.createEntry();
 
 
                 //create user
