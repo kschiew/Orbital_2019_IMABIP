@@ -88,24 +88,24 @@ public class Event implements Serializable, Comparable<Event> {
         db.collection(availableEventCollection).document(ID).set(event);
     }
 
-    public void partyUp(User user) {
-        Enrolled++;
-        Players.add(user.getID());
-
+    public void toUserHistory(String email) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection(availableEventCollection).document(ID).update(enrolledKey, Enrolled);
-        db.collection(availableEventCollection).document(ID).update(playersKey, Players);
-    }
+        Map<String, Object> event = new HashMap<>();
 
-    public void partyDown(User user) {
-        Enrolled--;
-        Players.remove(user);
+        event.put(contactKey, Contact);
+        event.put(descriptionKey, Description);
+        event.put(hostIDKey, HostID);
+        event.put(nameKey, Name);
+        event.put(venueKey, Venue);
+        event.put(typeKey, Type);
+        event.put(evTimeKey, EvTime);
+        event.put(partySizeKey, PartySize);
+        event.put(enrolledKey, Enrolled);
+        event.put(idKey, ID);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection(availableEventCollection).document(ID).update(enrolledKey, Enrolled);
-        db.collection(availableEventCollection).document(ID).update(playersKey, Players);
+        db.collection(User.usersCollection).document(email).collection(User.historyCollection)
+                .document(ID).set(event);
     }
 
     public static HashMap<String, Integer> setMonthsMap() {

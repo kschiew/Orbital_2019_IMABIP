@@ -57,6 +57,9 @@ class HostingAdapter extends ArrayAdapter<Event> {
                 db.collection(Event.availableEventCollection).document(cur.getID())
                         .delete();
 
+                db.collection(User.usersCollection).document(currentUser.getEmail())
+                        .collection(User.historyCollection).document(cur.getID()).delete();
+
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 getContext().startActivity(intent);
             }

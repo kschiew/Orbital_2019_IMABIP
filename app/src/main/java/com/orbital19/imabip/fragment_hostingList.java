@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
@@ -90,20 +91,25 @@ public class fragment_hostingList extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot thisUser = task.getResult();
                 ArrayList<String> enrolledList = (ArrayList<String>) thisUser.get(User.hostingKey);
-                for (String id : enrolledList) {
+                for (final String id : enrolledList) {
                     fs.collection(Event.availableEventCollection).document(id)
                             .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             DocumentSnapshot doc = task.getResult();
 
-                            Event EV = new Event((ArrayList<String>) doc.get(Event.contactKey), (String) doc.get(Event.descriptionKey),
-                                    (String) doc.get(Event.hostIDKey), (String) doc.get(Event.nameKey),
-                                    (String) doc.get(Event.typeKey), (String) doc.get(Event.venueKey),
-                                    (String) doc.get(Event.evTimeKey), (Long) doc.get(Event.partySizeKey),
-                                    (Long) doc.get(Event.enrolledKey));
+                            if (doc.exists()) {
+                                Event EV = new Event((ArrayList<String>) doc.get(Event.contactKey), (String) doc.get(Event.descriptionKey),
+                                        (String) doc.get(Event.hostIDKey), (String) doc.get(Event.nameKey),
+                                        (String) doc.get(Event.typeKey), (String) doc.get(Event.venueKey),
+                                        (String) doc.get(Event.evTimeKey), (Long) doc.get(Event.partySizeKey),
+                                        (Long) doc.get(Event.enrolledKey));
 
-                            events.add(EV);
+                                events.add(EV);
+                            } else {
+                                fs.collection(User.usersCollection).document(user.getEmail())
+                                        .update(User.hostingKey, FieldValue.arrayRemove(id));
+                            }
 
                             Collections.sort(events);
 

@@ -143,6 +143,7 @@ public class Host extends AppCompatActivity {
                         Long.parseLong(inputs[9]), Long.parseLong(inputs[8]));
 
                 ev.createEntry();
+                ev.toUserHistory(currentUser.getEmail());
 
                 fs.collection(User.usersCollection).document(currentUser.getEmail())
                         .update(User.hostingKey, FieldValue.arrayUnion(ev.getID()));

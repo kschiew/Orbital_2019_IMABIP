@@ -14,14 +14,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -29,8 +27,8 @@ import java.util.List;
 
 public class FilteringDataWorker extends Worker {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    HashMap<String, Integer> monthVal = Event.setMonthsMap();
-    Calendar calendar = Calendar.getInstance();
+    private HashMap<String, Integer> monthVal = Event.setMonthsMap();
+    private Calendar calendar = Calendar.getInstance();
     private static final String TAG = "FilteringDataWorker";
 
     public FilteringDataWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -50,7 +48,7 @@ public class FilteringDataWorker extends Worker {
         return ListenableWorker.Result.success();
     }
 
-    private void checkHostList(String email) {
+    private void checkHostList(final String email) {
         db.collection(User.usersCollection).document(email)
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -63,10 +61,16 @@ public class FilteringDataWorker extends Worker {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             DocumentSnapshot ev = task.getResult();
-                            String time = (String) ev.get(Event.evTimeKey);
-                            if (!gameYetToCome(time))
-                                db.collection(Event.availableEventCollection).document(game)
-                                    .delete();
+                            if (ev.exists()) {
+                                String time = (String) ev.get(Event.evTimeKey);
+                                if (!gameYetToCome(time)) {
+                                    db.collection(User.usersCollection).document(email)
+                                            .update(User.hostingKey, FieldValue.arrayRemove(game));
+
+                                    db.collection(Event.availableEventCollection).document(game)
+                                            .delete();
+                                }
+                            }
                         }
                     });
                 }
@@ -74,23 +78,29 @@ public class FilteringDataWorker extends Worker {
         });
     }
 
-    private void checkEnrolledList(String email) {
+    private void checkEnrolledList(final String email) {
         db.collection(User.usersCollection).document(email)
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot userDoc = task.getResult();
-                @NonNull ArrayList<String> hosting = (ArrayList<String>) userDoc.get(User.enrolledKey);
-                for (final String game : hosting) {
+                @NonNull ArrayList<String> enrolled = (ArrayList<String>) userDoc.get(User.enrolledKey);
+                for (final String game : enrolled) {
                     db.collection(Event.availableEventCollection).document(game)
                             .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             DocumentSnapshot ev = task.getResult();
-                            String time = (String) ev.get(Event.evTimeKey);
-                            if (!gameYetToCome(time))
-                                db.collection(Event.availableEventCollection).document(game)
-                                        .delete();
+                            if (ev.exists()) {
+                                String time = (String) ev.get(Event.evTimeKey);
+                                if (!gameYetToCome(time)) {
+                                    db.collection(User.usersCollection).document(email)
+                                            .update(User.enrolledKey, FieldValue.arrayRemove(game));
+
+                                    db.collection(Event.availableEventCollection).document(game)
+                                            .delete();
+                                }
+                            }
                         }
                     });
                 }
@@ -104,10 +114,12 @@ public class FilteringDataWorker extends Worker {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<DocumentSnapshot> docs = task.getResult().getDocuments();
-                for (DocumentSnapshot doc : docs) {
-                    if (!gameYetToCome((String) doc.get(Event.evTimeKey)))
-                        db.collection(Event.availableEventCollection)
-                                .document((String) doc.get(Event.idKey)).delete();
+                if (!docs.isEmpty()) {
+                    for (DocumentSnapshot doc : docs) {
+                        if (!gameYetToCome((String) doc.get(Event.evTimeKey)))
+                            db.collection(Event.availableEventCollection)
+                                    .document((String) doc.get(Event.idKey)).delete();
+                    }
                 }
             }
         });
@@ -135,12 +147,17 @@ public class FilteringDataWorker extends Worker {
             else { // same date
                 am_pm = calendar.get(Calendar.AM_PM);
                 mAM_PM = time.substring(15).equals("AM") ? 0 : 1;
-                if (mAM_PM > am_pm)
+                if (mAM_PM > am_pm) // now is AM and game is in PM
                     return true;
-                else if (mAM_PM < am_pm)
+                else if (mAM_PM < am_pm) // now is PM and game is in AM i.e finished
                     return false;
-                else {
-                    String hrs = "" + calendar.get(Calendar.HOUR) + "." + calendar.get(Calendar.MINUTE);
+                else { // same AM or PM
+                    String hrs = "" + (calendar.get(Calendar.HOUR) < 10
+                            ? "0" + calendar.get(Calendar.HOUR) : "" + calendar.get(Calendar.HOUR))
+                            + "." +
+                            (calendar.get(Calendar.MINUTE) < 10
+                            ? "0" + calendar.get(Calendar.MINUTE)
+                            : "" + calendar.get(Calendar.MINUTE));
                     String mHrs = time.substring(10, 15);
                     if (hrs.compareTo(mHrs) >= 0)
                         return false;

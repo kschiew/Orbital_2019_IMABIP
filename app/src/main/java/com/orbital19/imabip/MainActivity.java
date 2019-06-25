@@ -10,14 +10,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.orbital19.imabip.works.FilteringDataWorker;
+
+import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton mAddEvent;
     private TabLayout tabLayout;
+    private WorkManager workManager = WorkManager.getInstance();
 
 
     @Override
@@ -36,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // set refresh rate to 15mins
+        PeriodicWorkRequest refresh = new PeriodicWorkRequest.Builder(FilteringDataWorker.class, 15, TimeUnit.MINUTES).build();
+        workManager.enqueue(refresh);
+
+//        OneTimeWorkRequest update = new OneTimeWorkRequest.Builder(FilteringDataWorker.class).build();
+//        workManager.enqueue(update);
 
         mAddEvent = findViewById(R.id.addEvent);
 
@@ -87,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            startActivity(new Intent(this, SignupActivity.class));
+            finish();
+        }
+        OneTimeWorkRequest update = new OneTimeWorkRequest.Builder(FilteringDataWorker.class).build();
+        workManager.enqueue(update);
     }
 
     @Override
@@ -97,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, SignupActivity.class));
             finish();
         }
+        OneTimeWorkRequest update = new OneTimeWorkRequest.Builder(FilteringDataWorker.class).build();
+        workManager.enqueue(update);
     }
 
     private boolean displaySelectedScreen(Fragment fragment) {
