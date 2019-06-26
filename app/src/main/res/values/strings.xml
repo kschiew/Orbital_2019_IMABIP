@@ -52,4 +52,13 @@
     <string name="id_title">ID</string>
     <string name="email_title">Email</string>
     <string name="phone_title">Phone</string>
+    
+    <string name="notification_channel_participant">Participant Notification Channel</string>
+    <string name="notification_channel_starting">Starting Notification Channel</string>
+
+    <string name="starting_notification_body">%1$s is starting soon!</string>
+    <string name="started_notification_body">%1$s has started!</string>
+
+    <string name="new_participant_notification_body">%1$s has joined your game</string>
+    <string name="drop_participant_notification_body">%1$s has dropped out of your game</string>
 </resources>

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.work.WorkManager;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -67,6 +69,8 @@ public class EnrolledAdapter extends ArrayAdapter<Event> {
 
                 db.collection(User.usersCollection).document(currentUser.getEmail())
                         .collection(User.historyCollection).document(cur.getID()).delete();
+
+                WorkManager.getInstance().cancelAllWorkByTag(cur.getID());
 
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 getContext().startActivity(intent);

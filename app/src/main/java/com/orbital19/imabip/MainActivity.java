@@ -16,6 +16,9 @@ import androidx.work.WorkManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.orbital19.imabip.models.User;
 import com.orbital19.imabip.works.FilteringDataWorker;
 
 import java.util.concurrent.TimeUnit;
@@ -48,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
         // set refresh rate to 15mins
         PeriodicWorkRequest refresh = new PeriodicWorkRequest.Builder(FilteringDataWorker.class, 15, TimeUnit.MINUTES).build();
         workManager.enqueue(refresh);
-
-//        OneTimeWorkRequest update = new OneTimeWorkRequest.Builder(FilteringDataWorker.class).build();
-//        workManager.enqueue(update);
 
         mAddEvent = findViewById(R.id.addEvent);
 

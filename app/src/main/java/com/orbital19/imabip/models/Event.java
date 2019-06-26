@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -154,6 +155,66 @@ public class Event implements Serializable, Comparable<Event> {
                 }
             }
         }
+    }
 
+    /*
+        Calculate the delay till one hour before game
+     */
+    public long delayOne() {
+        int res = 0;
+        HashMap<String,Integer> month = setMonthsMap();
+        Calendar cal = Calendar.getInstance();
+        int hour = Integer.parseInt(EvTime.substring(10, 12));
+        hour += hour < 12 ? 0 : 12;
+        hour -= 1;
+
+        int min = Integer.parseInt(EvTime.substring(12, 15));
+        Calendar toCome = (new Calendar.Builder()).setDate(2019,
+                month.get(EvTime.substring(0, 3)), Integer.parseInt(EvTime.substring(4, 6)))
+                .setTimeOfDay(hour, min, 0).build();
+
+        return toCome.getTimeInMillis() - cal.getTimeInMillis();
+    }
+
+    /*
+        Calculate the delay till 30 mins before game
+     */
+    public long delayTwo() {
+        int res = 0;
+        HashMap<String,Integer> month = setMonthsMap();
+        Calendar cal = Calendar.getInstance();
+        int hour = Integer.parseInt(EvTime.substring(10, 12));
+        hour += hour < 12 ? 0 : 12;
+
+        int min = Integer.parseInt(EvTime.substring(12, 15));
+
+        double exactTime = hour + min/60;
+        exactTime -= 0.5;
+        hour = Integer.parseInt(("" + exactTime).substring(0, 2));
+        min = Integer.parseInt(("" + exactTime).substring(3)) * 60;
+
+        Calendar toCome = (new Calendar.Builder()).setDate(2019,
+                month.get(EvTime.substring(0, 3)), Integer.parseInt(EvTime.substring(4, 6)))
+                .setTimeOfDay(hour, min, 0).build();
+
+        return toCome.getTimeInMillis() - cal.getTimeInMillis();
+    }
+
+    /*
+        Calculate the delay till the starting point
+     */
+    public long delayExact() {
+        int res = 0;
+        HashMap<String,Integer> month = setMonthsMap();
+        Calendar cal = Calendar.getInstance();
+        int hour = Integer.parseInt(EvTime.substring(10, 12));
+        hour += hour < 12 ? 0 : 12;
+
+        int min = Integer.parseInt(EvTime.substring(12, 15));
+        Calendar toCome = (new Calendar.Builder()).setDate(2019,
+                month.get(EvTime.substring(0, 3)), Integer.parseInt(EvTime.substring(4, 6)))
+                .setTimeOfDay(hour, min, 0).build();
+
+        return toCome.getTimeInMillis() - cal.getTimeInMillis();
     }
 }

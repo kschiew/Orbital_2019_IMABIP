@@ -10,6 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
+import androidx.work.Worker;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,9 +28,12 @@ import com.orbital19.imabip.edits.EditHostActivity;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 import com.orbital19.imabip.models.user.DisplayUser;
+import com.orbital19.imabip.works.StartingNotifyWorker;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class Chosen extends AppCompatActivity {
 
@@ -97,6 +106,34 @@ public class Chosen extends AppCompatActivity {
                 DocumentReference event = db.collection(Event.availableEventCollection).document(ev.getID());
                 event.update(Event.enrolledKey, FieldValue.increment(1));
                 event.update(Event.playersKey, FieldValue.arrayUnion(current.getEmail()));
+
+                String notiTag = ev.getID();
+
+                Data inputData = new Data.Builder().putString(NotificationsHelper.STARTING_KEY, notiTag).build();
+                OneTimeWorkRequest workOne = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
+                        .setInitialDelay(ev.delayOne(), TimeUnit.MILLISECONDS)
+                        .setInputData(inputData)
+                        .addTag(notiTag)
+                        .build();
+
+                OneTimeWorkRequest workTwo = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
+                        .setInitialDelay(ev.delayTwo(), TimeUnit.MILLISECONDS)
+                        .setInputData(inputData)
+                        .addTag(notiTag)
+                        .build();
+
+                OneTimeWorkRequest workThree = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
+                        .setInitialDelay(ev.delayExact(), TimeUnit.MILLISECONDS)
+                        .setInputData(inputData)
+                        .addTag(notiTag)
+                        .build();
+
+                List<WorkRequest> lst = new ArrayList<>();
+                lst.add(workOne);
+                lst.add(workTwo);
+                lst.add(workThree);
+
+                WorkManager.getInstance().enqueue(lst);
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
