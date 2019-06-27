@@ -99,7 +99,7 @@ public class fragment_enrolled extends Fragment {
                                 EV.toUserHistory(currentUser.getEmail());
                             } else {
                                 db.collection(User.usersCollection).document(currentUser.getEmail())
-                                        .update(User.hostingKey, FieldValue.arrayRemove(id));
+                                        .update(User.enrolledKey, FieldValue.arrayRemove(id));
                             }
 
                             Collections.sort(events);

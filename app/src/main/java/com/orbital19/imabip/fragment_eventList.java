@@ -187,8 +187,10 @@ public class fragment_eventList extends Fragment {
                             (String) doc.get(Event.evTimeKey), (Long) doc.get(Event.partySizeKey),
                             (Long) doc.get(Event.enrolledKey));
 
-                    if (EV.getHost().contains(query) || EV.getName().contains(query)
-                            || EV.getType().contains(query) || EV.getVenue().contains(query))
+                    if (EV.getHost().toLowerCase().contains(query.toLowerCase())
+                            || EV.getName().toLowerCase().contains(query.toLowerCase())
+                            || EV.getType().toLowerCase().contains(query.toLowerCase())
+                            || EV.getVenue().toLowerCase().contains(query.toLowerCase()))
                         if (!EV.getContact().get(0).equals(user.getEmail()))
                             events.add(EV);
                 }

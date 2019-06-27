@@ -110,17 +110,26 @@ public class Chosen extends AppCompatActivity {
                 String notiTag = ev.getID();
 
                 Data inputData = new Data.Builder().putString(NotificationsHelper.STARTING_KEY, notiTag).build();
-                OneTimeWorkRequest workOne = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
-                        .setInitialDelay(ev.delayOne(), TimeUnit.MILLISECONDS)
-                        .setInputData(inputData)
-                        .addTag(notiTag)
-                        .build();
 
-                OneTimeWorkRequest workTwo = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
-                        .setInitialDelay(ev.delayTwo(), TimeUnit.MILLISECONDS)
-                        .setInputData(inputData)
-                        .addTag(notiTag)
-                        .build();
+                long dOne = ev.delayOne();
+                OneTimeWorkRequest workOne = null;
+                if (dOne > 0) {
+                    workOne = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
+                            .setInitialDelay(dOne, TimeUnit.MILLISECONDS)
+                            .setInputData(inputData)
+                            .addTag(notiTag)
+                            .build();
+                }
+
+                long dTwo = ev.delayTwo();
+                OneTimeWorkRequest workTwo = null;
+                if (dTwo > 0) {
+                    workTwo = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
+                            .setInitialDelay(dTwo, TimeUnit.MILLISECONDS)
+                            .setInputData(inputData)
+                            .addTag(notiTag)
+                            .build();
+                }
 
                 OneTimeWorkRequest workThree = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
                         .setInitialDelay(ev.delayExact(), TimeUnit.MILLISECONDS)
@@ -129,8 +138,8 @@ public class Chosen extends AppCompatActivity {
                         .build();
 
                 List<WorkRequest> lst = new ArrayList<>();
-                lst.add(workOne);
-                lst.add(workTwo);
+                if (workOne != null) lst.add(workOne);
+                if (workTwo != null) lst.add(workTwo);
                 lst.add(workThree);
 
                 WorkManager.getInstance().enqueue(lst);
