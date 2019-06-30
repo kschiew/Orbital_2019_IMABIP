@@ -3,6 +3,7 @@ package com.orbital19.imabip.works;
 import android.app.Notification;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
@@ -46,7 +47,7 @@ public class StartingNotifyWorker extends Worker {
                     String name = (String) doc.get(Event.nameKey);
                     NotificationsHelper notificationsHelper = new NotificationsHelper(getApplicationContext());
 
-                    Notification.Builder notificationBuilder =
+                    NotificationCompat.Builder notificationBuilder =
                             notificationsHelper.getNotificationStart(
                                     NotificationsHelper.STARTING_TITLE,
                                     name + NotificationsHelper.STARTING_BODY);

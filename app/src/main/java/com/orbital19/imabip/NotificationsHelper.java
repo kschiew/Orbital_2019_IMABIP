@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.app.NotificationCompat;
 
 /** Helper class to manage notification channels, and create notifications. */
 public class NotificationsHelper extends ContextWrapper {
@@ -67,7 +68,7 @@ public class NotificationsHelper extends ContextWrapper {
     }
 
     /**
-     * Get a direct message notification
+     * Get a Participant message notification
      *
      * <p>Provide the builder rather than the notification it's self as useful for making
      * notification changes.
@@ -76,8 +77,8 @@ public class NotificationsHelper extends ContextWrapper {
      * @param body Message for notification.
      * @return A Notification.Builder configured with the selected channel and details
      */
-    public Notification.Builder getNotificationParti(String title, String body) {
-        return new Notification.Builder(getApplicationContext(), PARTICIPANT_CHANNEL)
+    public NotificationCompat.Builder getNotificationParti(String title, String body) {
+        return new NotificationCompat.Builder(getApplicationContext(), PARTICIPANT_CHANNEL)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -86,7 +87,7 @@ public class NotificationsHelper extends ContextWrapper {
     }
 
     /**
-     * Get a direct message notification
+     * Get a Starting message notification
      *
      * <p>Provide the builder rather than the notification it's self as useful for making
      * notification changes.
@@ -95,8 +96,8 @@ public class NotificationsHelper extends ContextWrapper {
      * @param body Message for notification.
      * @return A Notification.Builder configured with the selected channel and details
      */
-    public Notification.Builder getNotificationStart(String title, String body) {
-        return new Notification.Builder(getApplicationContext(), PARTICIPANT_CHANNEL)
+    public NotificationCompat.Builder getNotificationStart(String title, String body) {
+        return new NotificationCompat.Builder(getApplicationContext(), STARTING_CHANNEL)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -121,7 +122,7 @@ public class NotificationsHelper extends ContextWrapper {
         stackBuilder.addParentStack(MainActivity.class);
         // Adds the Intent that starts the Activity to the top of the stack
         stackBuilder.addNextIntent(openMainIntent);
-        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_ONE_SHOT);
+        return stackBuilder.getPendingIntent(1, PendingIntent.FLAG_ONE_SHOT);
     }
 
     /**
@@ -130,7 +131,7 @@ public class NotificationsHelper extends ContextWrapper {
      * @param id The ID of the notification
      * @param notification The notification object
      */
-    public void notify(int id, Notification.Builder notification) {
+    public void notify(int id, NotificationCompat.Builder notification) {
         getNotificationManager().notify(id, notification.build());
     }
 

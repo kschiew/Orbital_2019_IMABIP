@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FloatingActionButton mAddEvent;
+    private FloatingActionButton mAddEvent, mRefreshEvent;
     private TabLayout tabLayout;
     private WorkManager workManager = WorkManager.getInstance();
 
@@ -122,6 +122,34 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onTabReselected(TabLayout.Tab tab) {
 
+                }
+            });
+
+            // refresh on User's request
+            mRefreshEvent = findViewById(R.id.refreshButt);
+
+            mRefreshEvent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OneTimeWorkRequest update = new OneTimeWorkRequest.Builder(FilteringDataWorker.class).build();
+                    workManager.enqueue(update);
+                    Fragment frag = null;
+                    switch (tabLayout.getSelectedTabPosition()) {
+                        case 0:
+                            frag = new fragment_eventList();
+                            break;
+                        case 1:
+                            frag = new fragment_enrolled();
+                            break;
+                        case 2:
+                            frag = new fragment_hostingList();
+                            break;
+                        case 3:
+                            frag = new fragment_view_Account();
+                            break;
+                    }
+
+                    displaySelectedScreen(frag);
                 }
             });
         }

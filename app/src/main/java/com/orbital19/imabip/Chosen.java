@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -143,6 +144,7 @@ public class Chosen extends AppCompatActivity {
                 lst.add(workThree);
 
                 WorkManager.getInstance().enqueue(lst);
+                Log.d("Noti queued", "Planned notifications");
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);

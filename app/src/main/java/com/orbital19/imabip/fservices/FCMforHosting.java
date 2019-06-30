@@ -1,6 +1,7 @@
 package com.orbital19.imabip.fservices;
 
 import android.app.Notification;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +25,7 @@ public class FCMforHosting extends FirebaseMessagingService {
             if (message.equals("New player")) {
                 NotificationsHelper notificationsHelper = new NotificationsHelper(getApplicationContext());
 
-                Notification.Builder notificationBuilder =
+                NotificationCompat.Builder notificationBuilder =
                         notificationsHelper.getNotificationParti(
                                 NotificationsHelper.PARTICIPANT_JOIN,
                                 "A new player" + NotificationsHelper.PARTICIPANT_JOIN_BODY
@@ -34,7 +35,7 @@ public class FCMforHosting extends FirebaseMessagingService {
             } else if (message.equals("Dropped player")) {
                 NotificationsHelper notificationsHelper = new NotificationsHelper(getApplicationContext());
 
-                Notification.Builder notificationBuilder =
+                NotificationCompat.Builder notificationBuilder =
                         notificationsHelper.getNotificationParti(
                                 NotificationsHelper.PARTICIPANT_DROP,
                                 "A player" + NotificationsHelper.PARTICIPANT_DROP_BODY

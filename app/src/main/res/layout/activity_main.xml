@@ -2,11 +2,11 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbarTrackHorizontal="@android:drawable/ic_input_add"
-    tools:context=".MainActivity"
-    android:id="@+id/main_activity">
+    android:scrollbarTrackHorizontal="@android:drawable/ic_popup_sync"
+    tools:context=".MainActivity">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addEvent"
@@ -20,11 +20,23 @@
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/refreshButt"
+        android:layout_width="59dp"
+        android:layout_height="61dp"
+        android:layout_marginBottom="120dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@color/DarkGray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@android:drawable/ic_popup_sync" />
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="16dp">
 
@@ -32,7 +44,7 @@
             android:id="@+id/view_event_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Games"/>
+            android:text="Games" />
 
         <android.support.design.widget.TabItem
             android:id="@+id/view_enrolled_events"
@@ -60,13 +72,6 @@
         app:layout_constraintTop_toBottomOf="@id/tabs">
 
     </FrameLayout>
-    <!--<include-->
-        <!--layout="@layout/fragment_event_list"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginTop="48dp"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/tabs"-->
-        <!--tools:layout_editor_absoluteX="-16dp" />-->
 
 </android.support.constraint.ConstraintLayout>
 
