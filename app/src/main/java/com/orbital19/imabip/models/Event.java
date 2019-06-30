@@ -157,6 +157,21 @@ public class Event implements Serializable, Comparable<Event> {
         }
     }
 
+    public long getTimeInMilis() {
+
+        HashMap<String,Integer> month = setMonthsMap();
+        int hour = Integer.parseInt(EvTime.substring(10, 12));
+        hour += hour < 12 ? 0 : 12;
+        int min = Integer.parseInt(EvTime.substring(13, 15));
+
+
+        Calendar appointment = (new Calendar.Builder()).setDate(2019,
+                month.get(EvTime.substring(0, 3))-1, Integer.parseInt(EvTime.substring(4, 6)))
+                .setTimeOfDay(hour, min, 0).build();
+
+        return appointment.getTimeInMillis();
+    }
+
     /*
         Calculate the delay till one hour before game
      */
@@ -170,7 +185,7 @@ public class Event implements Serializable, Comparable<Event> {
 
         int min = Integer.parseInt(EvTime.substring(13, 15));
         Calendar toCome = (new Calendar.Builder()).setDate(2019,
-                month.get(EvTime.substring(0, 3)), Integer.parseInt(EvTime.substring(4, 6)))
+                month.get(EvTime.substring(0, 3))-1, Integer.parseInt(EvTime.substring(4, 6)))
                 .setTimeOfDay(hour, min, 0).build();
 
         return toCome.getTimeInMillis() - cal.getTimeInMillis();
@@ -195,7 +210,7 @@ public class Event implements Serializable, Comparable<Event> {
         min = Integer.parseInt(toUse.substring(3)) * 60;
 
         Calendar toCome = (new Calendar.Builder()).setDate(2019,
-                month.get(EvTime.substring(0, 3)), Integer.parseInt(EvTime.substring(4, 6)))
+                month.get(EvTime.substring(0, 3))-1, Integer.parseInt(EvTime.substring(4, 6)))
                 .setTimeOfDay(hour, min, 0).build();
 
         return toCome.getTimeInMillis() - cal.getTimeInMillis();
@@ -213,7 +228,7 @@ public class Event implements Serializable, Comparable<Event> {
 
         int min = Integer.parseInt(EvTime.substring(13, 15));
         Calendar toCome = (new Calendar.Builder()).setDate(2019,
-                month.get(EvTime.substring(0, 3)), Integer.parseInt(EvTime.substring(4, 6)))
+                month.get(EvTime.substring(0, 3))-1, Integer.parseInt(EvTime.substring(4, 6)))
                 .setTimeOfDay(hour, min, 0).build();
 
         return toCome.getTimeInMillis() - cal.getTimeInMillis();

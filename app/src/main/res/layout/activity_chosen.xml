@@ -12,7 +12,9 @@
         android:id="@+id/ev_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="20dp"
         android:textSize="20dp"
+        android:paddingLeft="16dp"
         android:text="Event Name"/>
 
     <TextView
@@ -21,6 +23,7 @@
         android:layout_height="wrap_content"
         android:text="hostID"
         android:textSize="16dp"
+        android:paddingLeft="16dp"
         android:textStyle="italic"
         android:textColor="@color/Gray"/>
 
@@ -28,25 +31,43 @@
         android:id="@+id/ev_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingLeft="16dp"
         android:text="Time"/>
 
     <TextView
         android:id="@+id/ev_venue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingLeft="16dp"
         android:text="Venue"/>
 
     <TextView
         android:id="@+id/ev_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingLeft="16dp"
         android:text="Description"/>
 
     <TextView
         android:id="@+id/ev_party"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="5dp"
         android:text="Party size"/>
+
+    <TextView
+        android:id="@+id/save_to_calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="5dp"
+        android:text="Save to calendar?"
+        android:textStyle="italic"
+        android:textColor="@color/CadetBlue"/>
 
     <TextView
         android:id="@+id/joined_sign"
@@ -74,5 +95,14 @@
         android:gravity="center"
         android:layout_gravity="center"
         android:text="Edit"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/ev_rehost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="Re-host"
         android:visibility="gone"/>
 </LinearLayout>

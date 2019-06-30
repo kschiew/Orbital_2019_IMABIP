@@ -55,6 +55,17 @@ public class fragment_enrolled extends Fragment {
         listView = view.findViewById(R.id.enrolled_list);
         listView.setAdapter(enrolledAdapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+                Event ev = (Event) parent.getItemAtPosition(position);
+                Intent intent = new Intent(getContext(), Chosen.class);
+                intent.putExtra("Event", ev);
+                intent.putExtra("History", false);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 

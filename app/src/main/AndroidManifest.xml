@@ -14,15 +14,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".UserDetailsActivity"></activity>
-        <activity android:name=".edits.EditUserActivity"></activity>
+        <activity
+            android:name=".HistoryActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".UserDetailsActivity" />
+        <activity android:name=".edits.EditUserActivity" />
         <activity
             android:name=".models.user.DisplayUser"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -33,8 +36,8 @@
             android:name=".Host"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".SignupActivity" />
-        <activity android:name=".edits.EditHostActivity"/>
-        <activity android:name=".ui.login.LoginActivity"></activity>
+        <activity android:name=".edits.EditHostActivity" />
+        <activity android:name=".ui.login.LoginActivity" />
 
         <service
             android:name=".fservices.FCMforHosting"

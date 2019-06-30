@@ -24,6 +24,7 @@ import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
 
@@ -121,6 +122,8 @@ public class EditHostActivity extends AppCompatActivity {
         } else if (Strings.isEmptyOrWhitespace(inputs[9])
                 || !inputs[9].matches("[0-9]+")) {
             Toast.makeText(getApplicationContext(), "Invalid party size", Toast.LENGTH_SHORT).show();
+        } else if (lastInvalidCheck()){
+            Toast.makeText(getApplicationContext(), "Invalid game", Toast.LENGTH_SHORT).show();
         } else {
             FirebaseFirestore.getInstance().collection(Event.availableEventCollection).document(event.getID()).delete();
             FirebaseFirestore.getInstance().collection(User.usersCollection)
@@ -132,6 +135,21 @@ public class EditHostActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
+    }
+
+    private boolean lastInvalidCheck() {
+        ArrayList<String> contact = new ArrayList<>();
+        contact.add("d@mail.com");
+        contact.add("12345678");
+        Event ev = new Event(contact, inputs[7], "D", inputs[0],
+                inputs[1], inputs[2], inputs[3] + " " + inputs[4] + " at " + inputs[5] + inputs[6],
+                Long.parseLong(inputs[9]), Long.parseLong(inputs[8]));
+
+        if (ev.getTimeInMilis() < Calendar.getInstance().getTimeInMillis())
+            return true;
+        else
+            return false;
+
     }
 
     @Override

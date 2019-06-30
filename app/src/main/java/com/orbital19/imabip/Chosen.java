@@ -32,13 +32,14 @@ import com.orbital19.imabip.models.user.DisplayUser;
 import com.orbital19.imabip.works.StartingNotifyWorker;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class Chosen extends AppCompatActivity {
 
-    private Button toJoin, toEdit;
+    private Button toJoin, toEdit, toRehost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class Chosen extends AppCompatActivity {
         final TextView descriptionTV = view.findViewById(R.id.ev_description);
         TextView partyTV = view.findViewById(R.id.ev_party);
         final TextView joinedSignTV = view.findViewById(R.id.joined_sign);
+        TextView saveToCalendarTV = view.findViewById(R.id.save_to_calendar);
 
         nameTV.setText(ev.getName());
         hostTV.setText(ev.getHost());
@@ -85,6 +87,19 @@ public class Chosen extends AppCompatActivity {
                         finish();
                     }
                 });
+            }
+        });
+        saveToCalendarTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setType("vnd.android.cursor.item/event");
+                intent.putExtra("beginTime", ev.getTimeInMilis());
+                intent.putExtra("allDay", false);
+                intent.putExtra("endTime", ev.getTimeInMilis()+60*60*1000);
+                intent.putExtra("title", ev.getName());
+                startActivity(intent);
             }
         });
         timeTV.setText(ev.getTime());
@@ -166,11 +181,25 @@ public class Chosen extends AppCompatActivity {
             }
         });
 
+        toRehost = findViewById(R.id.ev_rehost);
+
+        toRehost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), EditHostActivity.class);
+                intent.putExtra("toEditEvent", ev);
+                startActivity(intent);
+
+                finish();
+            }
+        });
+
         if (bundle.getBoolean("hosting")) {
             joinedSignTV.setVisibility(View.GONE);
             toJoin.setVisibility(View.GONE);
             toEdit.setVisibility(View.VISIBLE);
-        } else {
+            toRehost.setVisibility(View.GONE);
+        } else if (!bundle.getBoolean("History")){
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseFirestore.getInstance().collection(User.usersCollection).document(user.getEmail())
                     .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -181,12 +210,19 @@ public class Chosen extends AppCompatActivity {
                     if (lst.contains(ev.getID())) {
                         joinedSignTV.setVisibility(View.VISIBLE);
                         toJoin.setVisibility(View.GONE);
+                        toRehost.setVisibility(View.GONE);
                     } else {
                         joinedSignTV.setVisibility(View.GONE);
                         toJoin.setVisibility(View.VISIBLE);
+                        toRehost.setVisibility(View.GONE);
                     }
                 }
             });
+        } else { // History
+            toJoin.setVisibility(View.GONE);
+            toEdit.setVisibility(View.GONE);
+            joinedSignTV.setVisibility(View.GONE);
+            toRehost.setVisibility(View.VISIBLE);
         }
     }
 

@@ -52,7 +52,7 @@
     <string name="id_title">ID</string>
     <string name="email_title">Email</string>
     <string name="phone_title">Phone</string>
-    
+
     <string name="notification_channel_participant">Participant Notification Channel</string>
     <string name="notification_channel_starting">Starting Notification Channel</string>
 

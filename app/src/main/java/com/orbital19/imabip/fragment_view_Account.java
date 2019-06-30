@@ -45,6 +45,7 @@ public class fragment_view_Account extends Fragment {
         viewAccount = view.findViewById(R.id.view_my_account);
         viewHistory = view.findViewById(R.id.view_history);
         viewSettings = view.findViewById(R.id.view_settings);
+        viewSettings.setVisibility(View.GONE);
         signOutBtn = view.findViewById(R.id.sign_out_button);
 
         viewAccount.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +75,13 @@ public class fragment_view_Account extends Fragment {
                 FirebaseAuth.getInstance().signOut();
 
                 startActivity(new Intent(view.getContext(), SignupActivity.class));
+            }
+        });
+
+        viewHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), HistoryActivity.class));
             }
         });
 

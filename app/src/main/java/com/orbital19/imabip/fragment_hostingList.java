@@ -62,6 +62,7 @@ public class fragment_hostingList extends Fragment {
                 Intent intent = new Intent(getContext(), Chosen.class);
                 intent.putExtra("Event", ev);
                 intent.putExtra("hosting", true);
+                intent.putExtra("History", false);
                 startActivity(intent);
             }
         });
