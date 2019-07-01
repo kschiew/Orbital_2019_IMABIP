@@ -9,7 +9,6 @@
         android:id="@+id/enrolled_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="true">
-    </ListView>
+        android:nestedScrollingEnabled="true"></ListView>
 
 </FrameLayout>

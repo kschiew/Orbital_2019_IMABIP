@@ -125,10 +125,14 @@ public class EditHostActivity extends AppCompatActivity {
         } else if (lastInvalidCheck()){
             Toast.makeText(getApplicationContext(), "Invalid game", Toast.LENGTH_SHORT).show();
         } else {
+            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
             FirebaseFirestore.getInstance().collection(Event.availableEventCollection).document(event.getID()).delete();
             FirebaseFirestore.getInstance().collection(User.usersCollection)
-                    .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                    .document(email)
                     .update(User.hostingKey, FieldValue.arrayRemove(event.getID()));
+            FirebaseFirestore.getInstance().collection(User.usersCollection)
+                    .document(email).collection(User.historyCollection)
+                    .document(event.getID()).delete();
 
             addNewEvent();
             addedToast();
@@ -184,11 +188,10 @@ public class EditHostActivity extends AppCompatActivity {
                         Long.parseLong(inputs[9]), Long.parseLong(inputs[8]));
 
                 ev.createEntry();
+                ev.toUserHistory(currentUser.getEmail());
 
                 fs.collection(User.usersCollection).document(currentUser.getEmail())
                         .update(User.hostingKey, FieldValue.arrayUnion(ev.getID()));
-
-
             }
         });
 

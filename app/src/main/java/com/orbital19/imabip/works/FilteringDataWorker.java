@@ -39,11 +39,13 @@ public class FilteringDataWorker extends Worker {
     @Override
     public ListenableWorker.Result doWork() {
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        checkHostList(user.getEmail());
-        checkEnrolledList(user.getEmail());
-        checkGeneralCollection();
+            checkHostList(user.getEmail());
+            checkEnrolledList(user.getEmail());
+            checkGeneralCollection();
+        }
 
         return ListenableWorker.Result.success();
     }

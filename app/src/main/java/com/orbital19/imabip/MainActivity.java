@@ -76,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
                     });
 
             // set refresh rate to 15mins
-            PeriodicWorkRequest refresh = new PeriodicWorkRequest.Builder(FilteringDataWorker.class, 15, TimeUnit.MINUTES).build();
+            PeriodicWorkRequest refresh = new PeriodicWorkRequest.Builder(FilteringDataWorker.class, 15, TimeUnit.MINUTES)
+                    .addTag("Filter").build();
             workManager.enqueue(refresh);
 
             mAddEvent = findViewById(R.id.addEvent);
@@ -132,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     OneTimeWorkRequest update = new OneTimeWorkRequest.Builder(FilteringDataWorker.class).build();
+                    workManager.cancelAllWorkByTag("Filter");
                     workManager.enqueue(update);
                     Fragment frag = null;
                     switch (tabLayout.getSelectedTabPosition()) {
@@ -163,7 +165,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, SignupActivity.class));
             finish();
         }
-        OneTimeWorkRequest update = new OneTimeWorkRequest.Builder(FilteringDataWorker.class).build();
+        OneTimeWorkRequest update = new OneTimeWorkRequest.Builder(FilteringDataWorker.class).
+                addTag("Filter").build();
         workManager.enqueue(update);
     }
 
@@ -175,7 +178,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, SignupActivity.class));
             finish();
         }
-        OneTimeWorkRequest update = new OneTimeWorkRequest.Builder(FilteringDataWorker.class).build();
+        OneTimeWorkRequest update = new OneTimeWorkRequest.Builder(FilteringDataWorker.class)
+                .addTag("Filter").build();
         workManager.enqueue(update);
     }
 

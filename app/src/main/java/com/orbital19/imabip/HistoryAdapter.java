@@ -41,7 +41,6 @@ public class HistoryAdapter extends ArrayAdapter {
 
         TextView nameTV = rowView.findViewById(R.id.eventName_history);
         TextView hostTV = rowView.findViewById(R.id.hostID_history);
-        TextView paxTV = rowView.findViewById(R.id.pax_history);
         TextView timeTV = rowView.findViewById(R.id.time_history);
         TextView typeTV = rowView.findViewById(R.id.type_history);
         TextView venueTV = rowView.findViewById(R.id.venue_history);
@@ -55,7 +54,6 @@ public class HistoryAdapter extends ArrayAdapter {
         venueTV.setText(cur.getVenue());
         String pax = String.format(Locale.getDefault(),
                 "%d / %d", cur.getEnrolled(), cur.getPartySize());
-        paxTV.setText(pax);
 
         return rowView;
     }

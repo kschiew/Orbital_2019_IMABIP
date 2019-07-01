@@ -161,7 +161,9 @@ public class Event implements Serializable, Comparable<Event> {
 
         HashMap<String,Integer> month = setMonthsMap();
         int hour = Integer.parseInt(EvTime.substring(10, 12));
-        hour += hour < 12 ? 0 : 12;
+        int amPM = EvTime.substring(15).equals("AM") ? 0 : 1;
+        hour += amPM * 12;
+
         int min = Integer.parseInt(EvTime.substring(13, 15));
 
 
