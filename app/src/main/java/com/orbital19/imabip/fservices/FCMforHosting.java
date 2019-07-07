@@ -25,7 +25,7 @@ public class FCMforHosting extends FirebaseMessagingService {
             if (message.equals("New player")) {
                 NotificationsHelper notificationsHelper = new NotificationsHelper(getApplicationContext());
 
-                NotificationCompat.Builder notificationBuilder =
+                Notification.Builder notificationBuilder =
                         notificationsHelper.getNotificationParti(
                                 NotificationsHelper.PARTICIPANT_JOIN,
                                 "A new player" + NotificationsHelper.PARTICIPANT_JOIN_BODY
@@ -35,7 +35,7 @@ public class FCMforHosting extends FirebaseMessagingService {
             } else if (message.equals("Dropped player")) {
                 NotificationsHelper notificationsHelper = new NotificationsHelper(getApplicationContext());
 
-                NotificationCompat.Builder notificationBuilder =
+                Notification.Builder notificationBuilder =
                         notificationsHelper.getNotificationParti(
                                 NotificationsHelper.PARTICIPANT_DROP,
                                 "A player" + NotificationsHelper.PARTICIPANT_DROP_BODY

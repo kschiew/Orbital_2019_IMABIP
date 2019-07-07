@@ -40,6 +40,7 @@ public class Event implements Serializable, Comparable<Event> {
     private Long Enrolled;
     private ArrayList<String> Players;
     private HashMap<String, Integer> monthValues = new HashMap<>();
+    private long millisValue = 0;
 
 
     public Event(ArrayList<String> contact, String desc, String host, String name, String type, String venue,
@@ -159,19 +160,23 @@ public class Event implements Serializable, Comparable<Event> {
 
     public long getTimeInMilis() {
 
-        HashMap<String,Integer> month = setMonthsMap();
-        int hour = Integer.parseInt(EvTime.substring(10, 12));
-        int amPM = EvTime.substring(15).equals("AM") ? 0 : 1;
-        hour += amPM * 12;
+        if (millisValue == 0) {
+            HashMap<String, Integer> month = setMonthsMap();
+            int hour = Integer.parseInt(EvTime.substring(10, 12));
+            int amPM = EvTime.substring(15).equals("AM") ? 0 : 1;
+            hour += amPM * 12;
 
-        int min = Integer.parseInt(EvTime.substring(13, 15));
+            int min = Integer.parseInt(EvTime.substring(13, 15));
 
 
-        Calendar appointment = (new Calendar.Builder()).setDate(2019,
-                month.get(EvTime.substring(0, 3))-1, Integer.parseInt(EvTime.substring(4, 6)))
-                .setTimeOfDay(hour, min, 0).build();
+            Calendar appointment = (new Calendar.Builder()).setDate(2019,
+                    month.get(EvTime.substring(0, 3)) - 1, Integer.parseInt(EvTime.substring(4, 6)))
+                    .setTimeOfDay(hour, min, 0).build();
 
-        return appointment.getTimeInMillis();
+            millisValue = appointment.getTimeInMillis();
+        }
+
+        return millisValue;
     }
 
     /*
@@ -179,18 +184,7 @@ public class Event implements Serializable, Comparable<Event> {
      */
     public long delayOne() {
 
-        HashMap<String,Integer> month = setMonthsMap();
-        Calendar cal = Calendar.getInstance();
-        int hour = Integer.parseInt(EvTime.substring(10, 12));
-        hour += hour < 12 ? 0 : 12;
-        hour -= 1;
-
-        int min = Integer.parseInt(EvTime.substring(13, 15));
-        Calendar toCome = (new Calendar.Builder()).setDate(2019,
-                month.get(EvTime.substring(0, 3))-1, Integer.parseInt(EvTime.substring(4, 6)))
-                .setTimeOfDay(hour, min, 0).build();
-
-        return toCome.getTimeInMillis() - cal.getTimeInMillis();
+        return getTimeInMilis() - 60*60*1000 - Calendar.getInstance().getTimeInMillis();
     }
 
     /*
@@ -198,24 +192,7 @@ public class Event implements Serializable, Comparable<Event> {
      */
     public long delayTwo() {
 
-        HashMap<String,Integer> month = setMonthsMap();
-        Calendar cal = Calendar.getInstance();
-        int hour = Integer.parseInt(EvTime.substring(10, 12));
-        hour += hour < 12 ? 0 : 12;
-
-        int min = Integer.parseInt(EvTime.substring(13, 15));
-
-        double exactTime = hour + min/60;
-        exactTime -= 0.5;
-        String toUse = exactTime < 10 ? "0" + exactTime : "" + exactTime;
-        hour = Integer.parseInt((toUse.substring(0, 2)));
-        min = Integer.parseInt(toUse.substring(3)) * 60;
-
-        Calendar toCome = (new Calendar.Builder()).setDate(2019,
-                month.get(EvTime.substring(0, 3))-1, Integer.parseInt(EvTime.substring(4, 6)))
-                .setTimeOfDay(hour, min, 0).build();
-
-        return toCome.getTimeInMillis() - cal.getTimeInMillis();
+        return getTimeInMilis() - 30*60*1000 - Calendar.getInstance().getTimeInMillis();
     }
 
     /*
@@ -223,16 +200,6 @@ public class Event implements Serializable, Comparable<Event> {
      */
     public long delayExact() {
 
-        HashMap<String,Integer> month = setMonthsMap();
-        Calendar cal = Calendar.getInstance();
-        int hour = Integer.parseInt(EvTime.substring(10, 12));
-        hour += hour < 12 ? 0 : 12;
-
-        int min = Integer.parseInt(EvTime.substring(13, 15));
-        Calendar toCome = (new Calendar.Builder()).setDate(2019,
-                month.get(EvTime.substring(0, 3))-1, Integer.parseInt(EvTime.substring(4, 6)))
-                .setTimeOfDay(hour, min, 0).build();
-
-        return toCome.getTimeInMillis() - cal.getTimeInMillis();
+        return getTimeInMilis() - Calendar.getInstance().getTimeInMillis();
     }
 }

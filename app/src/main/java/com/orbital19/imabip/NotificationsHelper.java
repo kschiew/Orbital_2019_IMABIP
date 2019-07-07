@@ -44,7 +44,7 @@ public class NotificationsHelper extends ContextWrapper {
                 new NotificationChannel(
                         PARTICIPANT_CHANNEL,
                         getString(R.string.notification_channel_participant),
-                        NotificationManager.IMPORTANCE_DEFAULT);
+                        NotificationManager.IMPORTANCE_HIGH);
 
         participantChannel.setLightColor(Color.GREEN);
         participantChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
@@ -58,7 +58,7 @@ public class NotificationsHelper extends ContextWrapper {
                 new NotificationChannel(
                         STARTING_CHANNEL,
                         getString(R.string.notification_channel_starting),
-                        NotificationManager.IMPORTANCE_DEFAULT);
+                        NotificationManager.IMPORTANCE_HIGH);
 
         startingChannel.setLightColor(Color.BLUE);
         startingChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
@@ -77,8 +77,8 @@ public class NotificationsHelper extends ContextWrapper {
      * @param body Message for notification.
      * @return A Notification.Builder configured with the selected channel and details
      */
-    public NotificationCompat.Builder getNotificationParti(String title, String body) {
-        return new NotificationCompat.Builder(getApplicationContext(), PARTICIPANT_CHANNEL)
+    public Notification.Builder getNotificationParti(String title, String body) {
+        return new Notification.Builder(getApplicationContext(), PARTICIPANT_CHANNEL)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -96,8 +96,8 @@ public class NotificationsHelper extends ContextWrapper {
      * @param body Message for notification.
      * @return A Notification.Builder configured with the selected channel and details
      */
-    public NotificationCompat.Builder getNotificationStart(String title, String body) {
-        return new NotificationCompat.Builder(getApplicationContext(), STARTING_CHANNEL)
+    public Notification.Builder getNotificationStart(String title, String body) {
+        return new Notification.Builder(getApplicationContext(), STARTING_CHANNEL)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -131,7 +131,7 @@ public class NotificationsHelper extends ContextWrapper {
      * @param id The ID of the notification
      * @param notification The notification object
      */
-    public void notify(int id, NotificationCompat.Builder notification) {
+    public void notify(int id, Notification.Builder notification) {
         getNotificationManager().notify(id, notification.build());
     }
 

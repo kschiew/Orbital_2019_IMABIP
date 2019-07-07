@@ -47,7 +47,7 @@ public class StartingNotifyWorker extends Worker {
                     String name = (String) doc.get(Event.nameKey);
                     NotificationsHelper notificationsHelper = new NotificationsHelper(getApplicationContext());
 
-                    NotificationCompat.Builder notificationBuilder =
+                    Notification.Builder notificationBuilder =
                             notificationsHelper.getNotificationStart(
                                     NotificationsHelper.STARTING_TITLE,
                                     name + NotificationsHelper.STARTING_BODY);

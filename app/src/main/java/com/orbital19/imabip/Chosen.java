@@ -153,12 +153,12 @@ public class Chosen extends AppCompatActivity {
                         .addTag(notiTag)
                         .build();
 
-                List<WorkRequest> lst = new ArrayList<>();
-                if (workOne != null) lst.add(workOne);
-                if (workTwo != null) lst.add(workTwo);
-                lst.add(workThree);
+                WorkManager workManager = WorkManager.getInstance();
 
-                WorkManager.getInstance().enqueue(lst);
+                if (workOne != null) workManager.enqueue(workOne);
+                if (workTwo != null) workManager.enqueue(workTwo);
+
+                workManager.enqueue(workThree);
                 Log.d("Noti queued", "Planned notifications");
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
