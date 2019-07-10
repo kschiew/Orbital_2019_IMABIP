@@ -15,6 +15,7 @@ public class User implements Serializable {
     public static String enrolledKey = "Enrolled";
     public static String hostingKey = "Hosting";
     public static String historyCollection = "HistoryCollection";
+    public static String bookingsCollection = "MyBookings";
 
 
     private String email;

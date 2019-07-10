@@ -15,8 +15,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".HistoryActivity"
+            android:name=".booking.MyBookingActivity"
             android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".booking.BookingActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".HistoryActivity"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".UserDetailsActivity" />
         <activity android:name=".edits.EditUserActivity" />
         <activity
