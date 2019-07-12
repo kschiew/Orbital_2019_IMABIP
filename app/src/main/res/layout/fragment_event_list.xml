@@ -10,8 +10,6 @@
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="56dp"
         android:showAsAction="collapseActionView|ifRoom"
         android:queryHint="Search for game's name, host, venue or sport" />
 

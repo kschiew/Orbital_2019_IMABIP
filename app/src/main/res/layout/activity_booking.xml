@@ -1,11 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/booking_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:nestedScrollingEnabled="true"
     tools:context=".booking.BookingActivity">
 
+    <TextView
+        android:id="@+id/date_booked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date"
+        android:textSize="30dp"
+        android:paddingTop="30dp"
+        android:background="@color/white"
+        android:layout_gravity="center_horizontal"/>
 
-</android.support.constraint.ConstraintLayout>
+    <Button
+        android:paddingBottom="30dp"
+        android:id="@+id/choose_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose date"
+        android:background="@color/white"/>
+
+    <TextView
+        android:id="@+id/sport_booked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sport"
+        android:textSize="30dp"
+        android:paddingTop="30dp"
+        android:background="@color/white"
+        android:layout_gravity="center_horizontal"/>
+
+    <Button
+        android:paddingBottom="30dp"
+        android:id="@+id/choose_sport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose sport"
+        android:background="@color/white"/>
+
+    <TextView
+        android:id="@+id/venue_booked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Venue"
+        android:textSize="30dp"
+        android:paddingTop="30dp"
+        android:background="@color/white"
+        android:layout_gravity="center_horizontal"/>
+
+    <Button
+        android:paddingBottom="30dp"
+        android:id="@+id/choose_venue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose venue"
+        android:background="@color/white"/>
+
+    <TextView
+        android:id="@+id/unit_booked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unit"
+        android:textSize="30dp"
+        android:paddingTop="30dp"
+        android:background="@color/white"
+        android:layout_gravity="center_horizontal"/>
+
+    <Button
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp"
+        android:id="@+id/choose_unit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose unit"
+        android:background="@color/white"/>
+
+    <TextView
+        android:id="@+id/hour_booked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hour slots"
+        android:textSize="30dp"
+        android:paddingTop="30dp"
+        android:background="@color/white"
+        android:layout_gravity="center_horizontal"/>
+
+    <Button
+        android:paddingBottom="30dp"
+        android:id="@+id/choose_hour"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose hour slots"
+        android:background="@color/white"/>
+
+    <Button
+        android:id="@+id/book"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Book!"
+        android:background="@color/WhiteSmoke"
+        android:layout_gravity="center_horizontal"/>
+</LinearLayout>
