@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.booking.BookingActivity;
+import com.orbital19.imabip.booking.MyBookingActivity;
 import com.orbital19.imabip.models.User;
 import com.orbital19.imabip.models.user.DisplayUser;
 
@@ -90,6 +91,13 @@ public class fragment_view_Account extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), BookingActivity.class));
+            }
+        });
+
+        viewBooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), MyBookingActivity.class));
             }
         });
         return view;

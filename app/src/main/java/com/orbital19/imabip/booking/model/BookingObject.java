@@ -9,7 +9,7 @@ import com.orbital19.imabip.models.User;
 import java.io.Serializable;
 import java.util.HashMap;
 
-public class BookingObject implements Serializable {
+public class BookingObject implements Serializable, Comparable<BookingObject> {
     private String Name, Sport, Date, Hour, Venue, Unit, Email;
 
     public static String bookingsCollection = "Bookings";
@@ -31,14 +31,6 @@ public class BookingObject implements Serializable {
         Email = email;
     }
 
-    public String getName() {
-        return Name;
-    }
-
-    public String getHour() {
-        return Hour;
-    }
-
     public void newEntry() {
         FirebaseFirestore fs = FirebaseFirestore.getInstance();
 
@@ -55,10 +47,10 @@ public class BookingObject implements Serializable {
         fs.collection(bookingsCollection).document(Venue).collection(Unit).document(Name).set(map);
     }
 
-    public static void deleteEntry(String booking) {
+    public void deleteEntry() {
         FirebaseFirestore fs = FirebaseFirestore.getInstance();
 
-        fs.collection(bookingsCollection).document(booking).delete();
+        fs.collection(bookingsCollection).document(Venue).collection(Unit).document(Name).delete();
     }
 
     public void addToUser(String email) {
@@ -75,5 +67,56 @@ public class BookingObject implements Serializable {
 
         fs.collection(User.usersCollection).document(email).collection(User.bookingsCollection)
                 .document(Name).set(map);
+    }
+
+    public void deleteFromUser(String email) {
+        FirebaseFirestore fs = FirebaseFirestore.getInstance();
+
+        fs.collection(User.usersCollection).document(email).collection(User.bookingsCollection)
+                .document(Name).delete();
+    }
+
+    public String getSport() {
+        return Sport;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public String getHour() {
+        return Hour;
+    }
+
+    public String getVenue() {
+        return Venue;
+    }
+
+    public String getUnit() {
+        return Unit;
+    }
+
+    public String getDate() {
+        return Date;
+    }
+
+    @Override
+    public int compareTo(BookingObject o) {
+        String[] time1 = this.Date.split("\\.");
+        String[] time2 = o.Date.split("\\.");
+
+        if (!this.Sport.equals(o.Sport))
+            return this.Sport.compareTo(o.Sport);
+        else if (!this.Venue.equals(o.Venue))
+            return this.Venue.compareTo(o.Venue);
+        else if (!this.Unit.equals(o.Unit))
+            return this.Unit.compareTo(o.Unit);
+        else if (!time2[2].equals(time1[2]))
+            return time1[2].compareTo(time2[2]);
+        else if (!time2[1].equals(time1[1]))
+            return time1[1].compareTo(time2[1]);
+        else
+            return time1[0].compareTo(time2[0]);
+
     }
 }
