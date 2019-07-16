@@ -18,12 +18,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.orbital19.imabip.booking.BookingActivity;
 import com.orbital19.imabip.models.User;
 import com.orbital19.imabip.models.user.DisplayUser;
 
 public class fragment_view_Account extends Fragment {
 
-    private TextView viewAccount, viewHistory, viewSettings;
+    private TextView viewAccount, viewHistory, newBooking, viewBooking;
 
     private Button signOutBtn;
 
@@ -44,8 +45,8 @@ public class fragment_view_Account extends Fragment {
 
         viewAccount = view.findViewById(R.id.view_my_account);
         viewHistory = view.findViewById(R.id.view_history);
-        viewSettings = view.findViewById(R.id.view_settings);
-        viewSettings.setVisibility(View.GONE);
+        newBooking = view.findViewById(R.id.new_booking);
+        viewBooking = view.findViewById(R.id.view_bookings);
         signOutBtn = view.findViewById(R.id.sign_out_button);
 
         viewAccount.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +86,12 @@ public class fragment_view_Account extends Fragment {
             }
         });
 
+        newBooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), BookingActivity.class));
+            }
+        });
         return view;
     }
 
