@@ -25,7 +25,7 @@ import com.orbital19.imabip.models.user.DisplayUser;
 
 public class fragment_view_Account extends Fragment {
 
-    private TextView viewAccount, viewHistory, newBooking, viewBooking;
+    private TextView viewAccount, viewHistory, newBooking, viewBooking, viewTeams;
 
     private Button signOutBtn;
 
@@ -48,6 +48,7 @@ public class fragment_view_Account extends Fragment {
         viewHistory = view.findViewById(R.id.view_history);
         newBooking = view.findViewById(R.id.new_booking);
         viewBooking = view.findViewById(R.id.view_bookings);
+        viewTeams = view.findViewById(R.id.view_teams);
         signOutBtn = view.findViewById(R.id.sign_out_button);
 
         viewAccount.setOnClickListener(new View.OnClickListener() {

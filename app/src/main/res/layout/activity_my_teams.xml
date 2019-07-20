@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".teams.MyTeamsActivity">
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs_teams"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="8dp">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/my_teams_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My teams" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/browse_teams"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Browse" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/create_team"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create" />
+
+    </android.support.design.widget.TabLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_container_teams"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tabs_teams">
+
+    </FrameLayout>
+
+</android.support.constraint.ConstraintLayout>

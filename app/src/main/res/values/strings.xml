@@ -61,4 +61,7 @@
 
     <string name="new_participant_notification_body">%1$s has joined your game</string>
     <string name="drop_participant_notification_body">%1$s has dropped out of your game</string>
+    <string name="title_activity_my_teams">MyTeamsActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>

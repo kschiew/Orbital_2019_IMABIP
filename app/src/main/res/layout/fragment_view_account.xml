@@ -42,6 +42,15 @@
         android:paddingTop="16dp"
         android:text="My Bookings"/>
 
+    <TextView
+        android:id="@+id/view_teams"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:text="My Teams"/>
+
     <Button
         android:id="@+id/sign_out_button"
         android:layout_width="wrap_content"

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/name_team"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/captain_team"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:textSize="20dp"
+        android:textColor="@color/Chocolate"/>
+
+    <ImageView
+        android:id="@+id/star_for_cap_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/btn_star_big_on"
+        app:layout_constraintLeft_toRightOf="@id/name_team"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/captain_team"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"/>
+
+    <TextView
+        android:id="@+id/captain_team"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name_team"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:text="Captain"
+        android:textSize="16dp"
+        android:textStyle="italic"/>
+
+
+
+</android.support.constraint.ConstraintLayout>

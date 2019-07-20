@@ -14,9 +14,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".teams.ChosenTeamView"></activity>
+        <activity
+            android:name=".teams.MyTeamsActivity"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".booking.MyBookingActivity"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".booking.BookingActivity"
             android:parentActivityName=".MainActivity" />

@@ -16,6 +16,8 @@ public class User implements Serializable {
     public static String hostingKey = "Hosting";
     public static String historyCollection = "HistoryCollection";
     public static String bookingsCollection = "MyBookings";
+    public static String joinedTeamsCollection = "MyTeams";
+    public static String captainOfCollection = "CaptainOf";
 
 
     private String email;
