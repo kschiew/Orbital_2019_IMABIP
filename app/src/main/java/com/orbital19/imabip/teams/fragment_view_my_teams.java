@@ -25,6 +25,7 @@ import com.orbital19.imabip.Chosen;
 import com.orbital19.imabip.EventAdapter;
 import com.orbital19.imabip.R;
 import com.orbital19.imabip.models.Event;
+import com.orbital19.imabip.models.User;
 import com.orbital19.imabip.teams.models.Team;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class fragment_view_my_teams extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_teams_list, container, false);
 
-        loadMyTeams();
+        loadData();
         teamAdapter = new TeamAdapter(getContext(), teams);
 
         list_View = view.findViewById(R.id.teams_joined_list);
@@ -65,6 +66,7 @@ public class fragment_view_my_teams extends Fragment {
                 Team team = (Team) parent.getItemAtPosition(position);
                 Intent intent = new Intent(getContext(), ChosenTeamView.class);
                 intent.putExtra("Team", team);
+                intent.putExtra("Joined", true);
                 startActivity(intent);
             }
         });
@@ -103,11 +105,32 @@ public class fragment_view_my_teams extends Fragment {
         super.onDetach();
     }
 
-    private void loadMyTeams() {
+    public void loadData() {
         final FirebaseFirestore fs = FirebaseFirestore.getInstance();
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
+        teams.removeAll(teams);
 
+        fs.collection(User.usersCollection).document(email).collection(User.joinedTeamsCollection).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<DocumentSnapshot> lst = task.getResult().getDocuments();
+
+                        for (DocumentSnapshot doc : lst) {
+                            Team team = new Team((String) doc.get(Team.teamNameKey),
+                                    (String) doc.get(Team.captainKey),
+                                    (String) doc.get(Team.capIDKey),
+                                    (Long) doc.get(Team.sizeKey));
+
+                            teams.add(team);
+                        }
+
+                        Collections.sort(teams);
+
+                        teamAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 
 }

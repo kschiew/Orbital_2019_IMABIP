@@ -1,9 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".teams.ChosenTeamView">
+    tools:context=".teams.ChosenTeamView"
+    android:orientation="vertical"
+    android:id="@+id/chosen_team_act"
+    android:nestedScrollingEnabled="true">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/team_name_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textSize="20dp"
+        android:textColor="@color/Indigo"
+        android:paddingTop="16dp"
+        android:paddingStart="16dp" />
+
+    <TextView
+        android:id="@+id/team_captain_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Captain"
+        android:textSize="18dp"
+        android:textStyle="italic"
+        android:textColor="@color/DarkOliveGreen"
+        android:paddingTop="16dp"
+        android:paddingStart="16dp" />
+
+    <TextView
+        android:id="@+id/team_size_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Size"
+        android:textSize="16dp"
+        android:textColor="@color/Black"
+        android:paddingTop="10dp"
+        android:paddingStart="16dp"/>
+
+    <TextView
+        android:id="@+id/team_members_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Members"
+        android:textSize="16dp"
+        android:textColor="@color/Black"
+        android:paddingTop="10dp"
+        android:paddingStart="32dp"/>
+
+    <ListView
+        android:id="@+id/team_members_list"
+        android:layout_width="wrap_content"
+        android:layout_height="330dp"
+        android:paddingStart="32dp"
+        android:paddingTop="10dp"
+        android:nestedScrollingEnabled="true"/>
+
+    <Button
+        android:id="@+id/leave_team_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:text="Leave" />
+
+    <Button
+        android:id="@+id/join_team_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:text="Join" />
+</LinearLayout>
