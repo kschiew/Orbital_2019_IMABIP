@@ -44,8 +44,9 @@ public class ChosenTeamView extends AppCompatActivity {
 
         TextView nameTV = findViewById(R.id.team_name_view);
         TextView captTV = findViewById(R.id.team_captain_view);
+        TextView descTV = findViewById(R.id.team_description_view);
         TextView sizeTV = findViewById(R.id.team_size_view);
-        final ListView membLV = findViewById(R.id.team_members_list);
+        TextView membTV = findViewById(R.id.team_members_view);
         Button leaveBtn = findViewById(R.id.leave_team_btn);
         Button joinBtn = findViewById(R.id.join_team_btn);
 
@@ -54,53 +55,15 @@ public class ChosenTeamView extends AppCompatActivity {
 
         nameTV.setText(tm.getName());
         captTV.setText(tm.getCapID());
-        sizeTV.setText(String.format(Locale.getDefault(), "%d", tm.getSize()));
-        final ArrayList<String> memEmails = new ArrayList<>();
-        final ArrayList<String> memIDs = new ArrayList<>();
-        fs.collection(Team.teamsCollection).document(tm.getName()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        descTV.setText(tm.getDescription());
+        sizeTV.setText(String.format(Locale.getDefault(), "Size: %d", tm.getSize()));
+
+        membTV.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot doc = task.getResult();
-
-                memEmails.addAll((ArrayList<String>) doc.get(Team.membersKey));
-
-                for (String EM : memEmails) {
-                    fs.collection(User.usersCollection).document(EM).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            memIDs.add((String) task.getResult().get(User.idKey));
-                        }
-                    });
-                }
-
-
-                String[] ar = new String[memIDs.size()];
-                memIDs.toArray(ar);
-                membLV.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.activity_chosen_team_view, ar));
-            }
-        });
-
-        membLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String toView = memEmails.get(position);
-                fs.collection(User.usersCollection).document(toView)
-                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        DocumentSnapshot doc = task.getResult();
-
-                        User user = new User((String) doc.get(User.emailKey), (String) doc.get(User.nameKey),
-                                (String) doc.get(User.phoneKey), (String) doc.get(User.idKey));
-
-                        Intent intent = new Intent(getApplicationContext(), DisplayUser.class);
-
-                        intent.putExtra("toViewUser", user);
-                        startActivity(intent);
-
-                        finish();
-                    }
-                });
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ViewMembers.class);
+                intent.putExtra("ViewingTeam", tm);
+                startActivity(intent);
             }
         });
 
@@ -108,40 +71,38 @@ public class ChosenTeamView extends AppCompatActivity {
             leaveBtn.setVisibility(View.VISIBLE);
             joinBtn.setVisibility(View.GONE);
 
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             leaveBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (userIsCapt) {
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(getApplicationContext());
-
                         dialog.setTitle("Confirm").setMessage("Leaving means " + tm.getName() + " will be dismissed")
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        tm.deleteTeam();
-                                        startActivity(new Intent(getApplicationContext(), MyTeamsActivity.class));
-                                    }
-                                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    tm.deleteTeam();
+                                    startActivity(new Intent(getApplicationContext(), MyTeamsActivity.class));
+                                }
+                            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
-                            }
+                                }
                         }).create().show();
                     } else {
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(getApplicationContext());
-
                         dialog.setTitle("Confirm").setMessage("Ready to leave the team?")
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        tm.leftMember(curEmail);
-                                        startActivity(new Intent(getApplicationContext(), MyTeamsActivity.class));
-                                    }
-                                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    tm.leftMember(curEmail);
+                                    startActivity(new Intent(getApplicationContext(), MyTeamsActivity.class));
+                                    finish();
+                                }
+                            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
-                            }
+                                }
                         }).create().show();
                     }
                 }
@@ -155,6 +116,7 @@ public class ChosenTeamView extends AppCompatActivity {
                 public void onClick(View v) {
                     tm.newMember(curEmail);
                     startActivity(new Intent(getApplicationContext(), MyTeamsActivity.class));
+                    finish();
                 }
             });
         }

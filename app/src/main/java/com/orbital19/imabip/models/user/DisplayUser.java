@@ -23,9 +23,9 @@ public class DisplayUser extends AppCompatActivity {
         setContentView(R.layout.activity_display_user);
         View view = findViewById(R.id.user_info_display);
 
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(false);
         getSupportActionBar().setTitle("Account Info");
 
         Intent intent = this.getIntent();

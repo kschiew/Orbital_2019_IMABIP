@@ -32,6 +32,16 @@
         android:paddingStart="16dp" />
 
     <TextView
+        android:id="@+id/team_description_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textSize="16dp"
+        android:textColor="@color/Black"
+        android:paddingTop="10dp"
+        android:paddingStart="16dp"/>
+
+    <TextView
         android:id="@+id/team_size_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,19 +55,12 @@
         android:id="@+id/team_members_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Members"
+        android:text="View Members"
+        android:textStyle="italic|bold"
         android:textSize="16dp"
-        android:textColor="@color/Black"
+        android:textColor="@color/Blue"
         android:paddingTop="10dp"
         android:paddingStart="32dp"/>
-
-    <ListView
-        android:id="@+id/team_members_list"
-        android:layout_width="wrap_content"
-        android:layout_height="330dp"
-        android:paddingStart="32dp"
-        android:paddingTop="10dp"
-        android:nestedScrollingEnabled="true"/>
 
     <Button
         android:id="@+id/leave_team_btn"

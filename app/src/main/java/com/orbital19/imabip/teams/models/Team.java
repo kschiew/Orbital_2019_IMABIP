@@ -1,6 +1,7 @@
 package com.orbital19.imabip.teams.models;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,16 +22,18 @@ public class Team implements Serializable, Comparable<Team> {
     public static String capIDKey = "CapID";
     public static String membersKey = "Members"; // array of emails
     public static String sizeKey = "Size"; // number
+    public static String descriptionKey = "Description";
     public static String teamHostingKey = "Hosting"; // array
     public static String teamJoinedKey = "Participating"; // array
 
-    private String name, captain, capID;
+    private String name, description, captain, capID;
     private Long size;
 
-    public Team(String name, String captain, String capID, Long size) {
+    public Team(String name, String captain, String capID, String description,Long size) {
         this.name = name;
         this.captain = captain;
         this.capID = capID;
+        this.description = description;
         this.size = size;
     }
 
@@ -40,16 +43,16 @@ public class Team implements Serializable, Comparable<Team> {
         map.put(teamNameKey, name);
         map.put(captainKey, captain);
         map.put(capIDKey, capID);
+        map.put(descriptionKey, description);
         map.put(sizeKey, size);
+        map.put(membersKey, new ArrayList<>());
 
         FirebaseFirestore fs = FirebaseFirestore.getInstance();
 
         fs.collection(teamsCollection).document(name).set(map);
         fs.collection(teamsCollection).document(name).update(membersKey, FieldValue.arrayUnion(captain));
-        fs.collection(User.usersCollection).document(captain).collection(User.captainOfCollection)
-                .document(name).set(map);
-        fs.collection(User.usersCollection).document(captain).collection(User.joinedTeamsCollection)
-                .document(name).set(map);
+        fs.collection(User.usersCollection).document(captain).update(User.joinedTeamsKey, FieldValue.arrayUnion(name),
+                User.captainOfKey, FieldValue.arrayUnion(name));
     }
 
     public void deleteTeam() {
@@ -59,17 +62,22 @@ public class Team implements Serializable, Comparable<Team> {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot doc = task.getResult();
 
-                ArrayList<String> mems = (ArrayList<String>) doc.get(membersKey);
-                for (String email : mems) {
-                    fs.collection(User.usersCollection).document(email).collection(User.joinedTeamsCollection)
-                            .document(name).delete();
+                if (doc.exists()) {
+                    ArrayList<String> mems = new ArrayList<>();
+                    mems.addAll((ArrayList<String>) doc.get(membersKey));
+                    for (String email : mems) {
+                        Log.d("Deleting team", email);
+                        fs.collection(User.usersCollection).document(email)
+                                .update(User.joinedTeamsKey, FieldValue.arrayRemove(name));
+
+                    }
                 }
+
+                fs.collection(User.usersCollection).document(captain).
+                        update(User.captainOfKey, FieldValue.arrayRemove(name));
+                fs.collection(teamsCollection).document(name).delete();
             }
         });
-
-        fs.collection(teamsCollection).document(name).delete();
-        fs.collection(User.usersCollection).document(captain).collection(User.captainOfCollection)
-                .document(name).delete();
     }
 
     public void newMember(String email) {
@@ -83,9 +91,9 @@ public class Team implements Serializable, Comparable<Team> {
         map.put(teamNameKey, name);
         map.put(captainKey, captain);
         map.put(capIDKey, capID);
+        map.put(descriptionKey, description);
         map.put(sizeKey, size);
-        fs.collection(User.usersCollection).document(email).collection(User.joinedTeamsCollection)
-                .document(name).set(map);
+        fs.collection(User.usersCollection).document(email).update(User.joinedTeamsKey, FieldValue.arrayUnion(name));
     }
 
     public void leftMember(String email) {
@@ -94,8 +102,7 @@ public class Team implements Serializable, Comparable<Team> {
         fs.collection(teamsCollection).document(name).update(membersKey, FieldValue.arrayRemove(email),
                 sizeKey, FieldValue.increment(-1));
 
-        fs.collection(User.usersCollection).document(email).collection(User.joinedTeamsCollection)
-                .document(name).delete();
+        fs.collection(User.usersCollection).document(email).update(User.joinedTeamsKey, FieldValue.arrayRemove(name));
     }
 
     public String getName() {
@@ -127,5 +134,9 @@ public class Team implements Serializable, Comparable<Team> {
 
     public Long getSize() {
         return size;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

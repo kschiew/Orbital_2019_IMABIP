@@ -22,6 +22,7 @@ import com.orbital19.imabip.booking.BookingActivity;
 import com.orbital19.imabip.booking.MyBookingActivity;
 import com.orbital19.imabip.models.User;
 import com.orbital19.imabip.models.user.DisplayUser;
+import com.orbital19.imabip.teams.MyTeamsActivity;
 
 public class fragment_view_Account extends Fragment {
 
@@ -101,6 +102,14 @@ public class fragment_view_Account extends Fragment {
                 startActivity(new Intent(getContext(), MyBookingActivity.class));
             }
         });
+
+        viewTeams.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), MyTeamsActivity.class));
+            }
+        });
+
         return view;
     }
 

@@ -14,7 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".teams.ChosenTeamView"></activity>
+        <activity
+            android:name=".teams.ViewMembers" />
+        <activity
+            android:name=".teams.ChosenTeamView"
+            android:parentActivityName=".teams.MyTeamsActivity"/>
         <activity
             android:name=".teams.MyTeamsActivity"
             android:parentActivityName=".MainActivity" />

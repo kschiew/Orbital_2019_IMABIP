@@ -16,8 +16,8 @@ public class User implements Serializable {
     public static String hostingKey = "Hosting";
     public static String historyCollection = "HistoryCollection";
     public static String bookingsCollection = "MyBookings";
-    public static String joinedTeamsCollection = "MyTeams";
-    public static String captainOfCollection = "CaptainOf";
+    public static String joinedTeamsKey = "MyTeams";
+    public static String captainOfKey = "CaptainOf";
 
 
     private String email;
@@ -47,6 +47,8 @@ public class User implements Serializable {
         map.put(idKey, ID);
         map.put(enrolledKey, new ArrayList<String>());
         map.put(hostingKey, new ArrayList<String>());
+        map.put(joinedTeamsKey, new ArrayList<String>());
+        map.put(captainOfKey, new ArrayList<String>());
 
         db.collection(usersCollection).document(email).set(map);
     }

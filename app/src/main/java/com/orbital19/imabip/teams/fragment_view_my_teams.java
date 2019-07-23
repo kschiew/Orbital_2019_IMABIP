@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.util.Strings;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -111,26 +112,38 @@ public class fragment_view_my_teams extends Fragment {
 
         teams.removeAll(teams);
 
-        fs.collection(User.usersCollection).document(email).collection(User.joinedTeamsCollection).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<DocumentSnapshot> lst = task.getResult().getDocuments();
+        fs.collection(User.usersCollection).document(email)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot thisUser = task.getResult();
+                ArrayList<String> userTeams = (ArrayList<String>) thisUser.get(User.joinedTeamsKey);
+                for (final String name : userTeams) {
+                    fs.collection(Team.teamsCollection).document(name)
+                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            DocumentSnapshot doc = task.getResult();
 
-                        for (DocumentSnapshot doc : lst) {
-                            Team team = new Team((String) doc.get(Team.teamNameKey),
-                                    (String) doc.get(Team.captainKey),
-                                    (String) doc.get(Team.capIDKey),
-                                    (Long) doc.get(Team.sizeKey));
+                            if (doc.exists()) {
+                                Team team = new Team((String) doc.get(Team.teamNameKey),
+                                        (String) doc.get(Team.captainKey),
+                                        (String) doc.get(Team.capIDKey),
+                                        (String) doc.get(Team.descriptionKey),
+                                        (Long) doc.get(Team.sizeKey));
 
-                            teams.add(team);
+                                teams.add(team);
+                            }
+
+                            Collections.sort(teams);
+
+                            teamAdapter.notifyDataSetChanged();
                         }
+                    });
+                }
 
-                        Collections.sort(teams);
-
-                        teamAdapter.notifyDataSetChanged();
-                    }
-                });
+            }
+        });
     }
 
 }
