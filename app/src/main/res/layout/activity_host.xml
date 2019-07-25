@@ -109,13 +109,22 @@
         android:hint="Maximum party size"
         android:inputType="text"/>
 
+    <TextView
+        android:id="@+id/input_identity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/input_pax"
+        android:text="Choose Identity"
+        android:textSize="20dp"
+        android:inputType="text"/>
+
     <Button
         android:id="@+id/host_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="Host"
-        app:layout_constraintTop_toBottomOf="@id/input_pax"
+        app:layout_constraintTop_toBottomOf="@id/input_identity"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 </android.support.constraint.ConstraintLayout>

@@ -1,6 +1,8 @@
 package com.orbital19.imabip;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +26,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
+import com.orbital19.imabip.teams.models.Team;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,7 +35,7 @@ import java.util.HashMap;
 
 public class Host extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private EditText inName, inType, inVenue, inHours, inAMorPM, inDesc, inFilled, inPax;
-    private TextView inMonth, inDate, pickDate;
+    private TextView inMonth, inDate, pickDate, pickIdentity;
     private Button hostBtn;
     private String[] inputs = new String[10];
 
@@ -58,6 +61,7 @@ public class Host extends AppCompatActivity implements DatePickerDialog.OnDateSe
         inFilled = findViewById(R.id.input_filled);
         inPax = findViewById(R.id.input_pax);
         pickDate = findViewById(R.id.Time_show);
+        pickIdentity = findViewById(R.id.input_identity);
 
         pickDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +70,12 @@ public class Host extends AppCompatActivity implements DatePickerDialog.OnDateSe
             }
         });
 
+        pickIdentity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showIdentityDialog();
+            }
+        });
 
         hostBtn = findViewById(R.id.host_button);
 
@@ -127,14 +137,96 @@ public class Host extends AppCompatActivity implements DatePickerDialog.OnDateSe
         } else if (Strings.isEmptyOrWhitespace(inputs[9])
                 || !inputs[9].matches("[0-9]+")) {
             Toast.makeText(getApplicationContext(), "Invalid party size", Toast.LENGTH_SHORT).show();
-        } else if (lastInvalidCheck()){
+        } else if (pickIdentity.getText().toString().equals("Choose Identity")) {
+            Toast.makeText(getApplicationContext(), "Invalid identity", Toast.LENGTH_SHORT).show();
+        } else if (lastInvalidCheck()) {
             Toast.makeText(getApplicationContext(), "Invalid game", Toast.LENGTH_SHORT).show();
-        } else {
+        } else if (pickIdentity.getText().toString().equals("Individual")) {
             addNewEvent();
             addedToast();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
+        } else { // as a team
+            String tmName = pickIdentity.getText().toString();
+            addTeamEvent(tmName);
+            addedToast();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
         }
+    }
+
+    private void addTeamEvent(final String tmName) {
+        final FirebaseFirestore fs = FirebaseFirestore.getInstance();
+        final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        fs.collection(User.usersCollection).document(currentUser.getEmail())
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot doc = task.getResult();
+
+                ArrayList<String> contact = new ArrayList<>();
+                contact.add((String) doc.get(User.emailKey));
+                contact.add((String) doc.get(User.phoneKey));
+
+                Event ev = new Event(contact, inputs[7], tmName, inputs[0],
+                        inputs[1], inputs[2], inputs[3] + " " + inputs[4] + " at " + inputs[5] + inputs[6],
+                        Long.parseLong(inputs[9]), Long.parseLong(inputs[8]), true);
+
+                ev.createEntry();
+                fs.collection(Team.teamsCollection).document(tmName)
+                        .update(Team.teamHostingKey, FieldValue.arrayUnion(ev.getID()));
+            }
+        });
+    }
+
+    private void showIdentityDialog() {
+        final AlertDialog.Builder identityDialog = new AlertDialog.Builder(this);
+
+        final ArrayList<CharSequence> options = new ArrayList<>();
+
+        options.add("Individual");
+        String curEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        FirebaseFirestore.getInstance().collection(User.usersCollection).document(curEmail)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot doc = task.getResult();
+
+                if (doc.exists()) {
+
+
+                    ArrayList<String> caps = (ArrayList<String>) doc.get(User.captainOfKey);
+
+                    for (String team : caps) {
+                        options.add(team);
+                    }
+
+                    final CharSequence[] arr = new CharSequence[options.size()];
+                    options.toArray(arr);
+
+                    identityDialog.setTitle("Pick identity").setSingleChoiceItems(arr, -1, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            pickIdentity.setText(arr[which]);
+                        }
+                    }).setPositiveButton("Choose", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+
+                    identityDialog.create().show();
+                }
+            }
+        });
     }
 
     private boolean lastInvalidCheck() {
