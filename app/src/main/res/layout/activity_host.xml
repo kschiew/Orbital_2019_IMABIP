@@ -35,31 +35,35 @@
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
         android:paddingRight="30dp"
-        android:text="Time: "
+        android:text="Pick time: "
         android:textSize="20dp"
+        android:background="@color/WhiteSmoke"
         app:layout_constraintBottom_toBottomOf="@+id/input_month"
         app:layout_constraintRight_toLeftOf="@id/input_month"
         app:layout_constraintTop_toTopOf="@+id/input_month" />
 
-    <EditText
+    <TextView
         android:id="@+id/input_month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/input_venue"
         app:layout_constraintLeft_toRightOf="@id/Time_show"
-        android:hint="Month (e.g Jan)"
+        android:text="Month (e.g Jan)"
+        android:layout_marginLeft="10dp"
+        android:textSize="20dp"
         android:inputType="text">
-    </EditText>
+    </TextView>
 
-    <EditText
+    <TextView
         android:id="@+id/input_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/input_venue"
         app:layout_constraintLeft_toRightOf="@id/input_month"
-        android:hint="Date (e.g 03)"
-        android:inputType="text">
-    </EditText>
+        android:text="Date (e.g 03)"
+        android:textSize="20dp"
+        android:layout_marginLeft="20dp">
+    </TextView>
 
     <EditText
         android:id="@+id/input_hours"

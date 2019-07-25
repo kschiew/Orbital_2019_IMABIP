@@ -1,5 +1,6 @@
 package com.orbital19.imabip;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +8,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -24,12 +27,12 @@ import com.orbital19.imabip.models.User;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
-import io.opencensus.internal.StringUtils;
 
-
-public class Host extends AppCompatActivity {
-    private EditText inName, inType, inVenue, inMonth, inDate, inHours, inAMorPM, inDesc, inFilled, inPax;
+public class Host extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+    private EditText inName, inType, inVenue, inHours, inAMorPM, inDesc, inFilled, inPax;
+    private TextView inMonth, inDate, pickDate;
     private Button hostBtn;
     private String[] inputs = new String[10];
 
@@ -54,6 +57,14 @@ public class Host extends AppCompatActivity {
         inDesc = findViewById(R.id.input_description);
         inFilled = findViewById(R.id.input_filled);
         inPax = findViewById(R.id.input_pax);
+        pickDate = findViewById(R.id.Time_show);
+
+        pickDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePicker();
+            }
+        });
 
 
         hostBtn = findViewById(R.id.host_button);
@@ -75,6 +86,18 @@ public class Host extends AppCompatActivity {
                 validate();
             }
         });
+    }
+
+    private void showDatePicker() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                this,
+                Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        );
+
+        datePickerDialog.show();
     }
 
 
@@ -171,6 +194,26 @@ public class Host extends AppCompatActivity {
     private void addedToast() {
         Toast.makeText(getApplicationContext(), "Game hosted successfully!", Toast.LENGTH_LONG)
             .show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        HashMap<Integer, String> months = new HashMap<>();
+        months.put(0, "Jan");
+        months.put(1, "Feb");
+        months.put(2, "Mar");
+        months.put(3, "Apr");
+        months.put(4, "May");
+        months.put(5, "Jun");
+        months.put(6, "Jul");
+        months.put(7, "Aug");
+        months.put(8, "Sep");
+        months.put(9, "Oct");
+        months.put(10, "Nov");
+        months.put(11, "Dec");
+
+        inMonth.setText(months.get(month));
+        inDate.setText(dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth);
     }
 }
 
