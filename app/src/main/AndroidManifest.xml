@@ -15,10 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".JoinConfirmActivity"/>
+        <activity
             android:name=".teams.ViewMembers" />
         <activity
             android:name=".teams.ChosenTeamView"
-            android:parentActivityName=".teams.MyTeamsActivity"/>
+            android:parentActivityName=".teams.MyTeamsActivity" />
         <activity
             android:name=".teams.MyTeamsActivity"
             android:parentActivityName=".MainActivity" />
@@ -31,8 +33,10 @@
         <activity
             android:name=".HistoryActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".UserDetailsActivity" />
-        <activity android:name=".edits.EditUserActivity" />
+        <activity
+            android:name=".UserDetailsActivity" />
+        <activity
+            android:name=".edits.EditUserActivity" />
         <activity
             android:name=".models.user.DisplayUser"
             android:parentActivityName=".MainActivity" />
@@ -49,9 +53,12 @@
         <activity
             android:name=".Host"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".SignupActivity" />
-        <activity android:name=".edits.EditHostActivity" />
-        <activity android:name=".ui.login.LoginActivity" />
+        <activity
+            android:name=".SignupActivity" />
+        <activity
+            android:name=".edits.EditHostActivity" />
+        <activity
+            android:name=".ui.login.LoginActivity" />
 
         <service
             android:name=".fservices.FCMforHosting"

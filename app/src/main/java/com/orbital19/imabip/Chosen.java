@@ -1,15 +1,18 @@
 package com.orbital19.imabip;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
@@ -29,6 +32,7 @@ import com.orbital19.imabip.edits.EditHostActivity;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 import com.orbital19.imabip.models.user.DisplayUser;
+import com.orbital19.imabip.teams.models.Team;
 import com.orbital19.imabip.works.StartingNotifyWorker;
 
 import java.util.ArrayList;
@@ -39,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Chosen extends AppCompatActivity {
 
-    private Button toJoin, toEdit, toRehost;
+    private Button toJoin, toEdit, toRehost, toDrop, pickIdentity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,60 +117,15 @@ public class Chosen extends AppCompatActivity {
         toJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseUser current = FirebaseAuth.getInstance().getCurrentUser();
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                if (ev.getEnrolled() < ev.getPartySize()) {
+                    Intent intent1 = new Intent(getApplicationContext(), JoinConfirmActivity.class);
+                    intent1.putExtra("toConfirm", ev);
+                    startActivity(intent1);
 
-                DocumentReference user = db.collection(User.usersCollection).document(current.getEmail());
-                user.update(User.enrolledKey, FieldValue.arrayUnion(ev.getID()));
-
-                DocumentReference event = db.collection(Event.availableEventCollection).document(ev.getID());
-                event.update(Event.enrolledKey, FieldValue.increment(1));
-                event.update(Event.playersKey, FieldValue.arrayUnion(current.getEmail()));
-
-                String notiTag = ev.getID();
-
-                Data inputData = new Data.Builder().putString(NotificationsHelper.STARTING_KEY, notiTag).build();
-
-                long dOne = ev.delayOne();
-                OneTimeWorkRequest workOne = null;
-                if (dOne > 0) {
-                    workOne = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
-                            .setInitialDelay(dOne, TimeUnit.MILLISECONDS)
-                            .setInputData(inputData)
-                            .addTag(notiTag)
-                            .build();
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "No more slots!", Toast.LENGTH_LONG).show();
                 }
-
-                long dTwo = ev.delayTwo();
-                OneTimeWorkRequest workTwo = null;
-                if (dTwo > 0) {
-                    workTwo = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
-                            .setInitialDelay(dTwo, TimeUnit.MILLISECONDS)
-                            .setInputData(inputData)
-                            .addTag(notiTag)
-                            .build();
-                }
-
-                OneTimeWorkRequest workThree = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
-                        .setInitialDelay(ev.delayExact(), TimeUnit.MILLISECONDS)
-                        .setInputData(inputData)
-                        .addTag(notiTag)
-                        .build();
-
-                WorkManager workManager = WorkManager.getInstance();
-
-                workManager.enqueue(workThree);
-
-                if (workOne != null) workManager.enqueue(workOne);
-                if (workTwo != null) workManager.enqueue(workTwo);
-
-
-                Log.d("Noti queued", "Planned notifications");
-
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-
-                finish();
             }
         });
 
@@ -196,8 +155,36 @@ public class Chosen extends AppCompatActivity {
             }
         });
 
+        toDrop = findViewById(R.id.ev_drop_out);
+
+        toDrop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                db.collection(User.usersCollection).document(currentUser.getEmail())
+                        .update(User.enrolledKey, FieldValue.arrayRemove(ev.getID()));
+
+                db.collection(Event.availableEventCollection).document(ev.getID())
+                        .update(Event.enrolledKey, FieldValue.increment(-1));
+
+                db.collection(Event.availableEventCollection).document(ev.getID())
+                        .update(Event.playersKey, FieldValue.arrayRemove(currentUser.getEmail()));
+
+                db.collection(User.usersCollection).document(currentUser.getEmail())
+                        .collection(User.historyCollection).document(ev.getID()).delete();
+
+                WorkManager.getInstance().cancelAllWorkByTag(ev.getID());
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
         if (bundle.getBoolean("hosting")) {
             joinedSignTV.setVisibility(View.GONE);
+            toDrop.setVisibility(View.GONE);
             toJoin.setVisibility(View.GONE);
             toEdit.setVisibility(View.VISIBLE);
             toRehost.setVisibility(View.GONE);
@@ -209,12 +196,14 @@ public class Chosen extends AppCompatActivity {
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     ArrayList<String> lst = (ArrayList<String>) task.getResult().get(User.enrolledKey);
 
-                    if (lst.contains(ev.getID())) {
+                    if (lst.contains(ev.getID())) { // joined
                         joinedSignTV.setVisibility(View.VISIBLE);
+                        toDrop.setVisibility(View.VISIBLE);
                         toJoin.setVisibility(View.GONE);
                         toRehost.setVisibility(View.GONE);
                     } else {
                         joinedSignTV.setVisibility(View.GONE);
+                        toDrop.setVisibility(View.GONE);
                         toJoin.setVisibility(View.VISIBLE);
                         toRehost.setVisibility(View.GONE);
                     }
@@ -224,6 +213,7 @@ public class Chosen extends AppCompatActivity {
             toJoin.setVisibility(View.GONE);
             toEdit.setVisibility(View.GONE);
             joinedSignTV.setVisibility(View.GONE);
+            toDrop.setVisibility(View.GONE);
             toRehost.setVisibility(View.VISIBLE);
         }
     }

@@ -120,7 +120,7 @@ public class Host extends AppCompatActivity {
         contact.add("12345678");
         Event ev = new Event(contact, inputs[7], "D", inputs[0],
                 inputs[1], inputs[2], inputs[3] + " " + inputs[4] + " at " + inputs[5] + inputs[6],
-                Long.parseLong(inputs[9]), Long.parseLong(inputs[8]));
+                Long.parseLong(inputs[9]), Long.parseLong(inputs[8]), false);
 
         if (ev.getTimeInMilis() < Calendar.getInstance().getTimeInMillis())
             return true;
@@ -157,7 +157,7 @@ public class Host extends AppCompatActivity {
 
                 Event ev = new Event(contact, inputs[7], (String) doc.get(User.idKey), inputs[0],
                         inputs[1], inputs[2], inputs[3] + " " + inputs[4] + " at " + inputs[5] + inputs[6],
-                        Long.parseLong(inputs[9]), Long.parseLong(inputs[8]));
+                        Long.parseLong(inputs[9]), Long.parseLong(inputs[8]), false);
 
                 ev.createEntry();
                 ev.toUserHistory(currentUser.getEmail());

@@ -25,6 +25,7 @@ public class Team implements Serializable, Comparable<Team> {
     public static String descriptionKey = "Description";
     public static String teamHostingKey = "Hosting"; // array
     public static String teamJoinedKey = "Participating"; // array
+    public static String teamActivitiesCollection = "Activities"; // collection
 
     private String name, description, captain, capID;
     private Long size;
@@ -46,6 +47,8 @@ public class Team implements Serializable, Comparable<Team> {
         map.put(descriptionKey, description);
         map.put(sizeKey, size);
         map.put(membersKey, new ArrayList<>());
+        map.put(teamHostingKey, new ArrayList<>());
+        map.put(teamJoinedKey, new ArrayList<>());
 
         FirebaseFirestore fs = FirebaseFirestore.getInstance();
 
@@ -86,13 +89,6 @@ public class Team implements Serializable, Comparable<Team> {
         fs.collection(teamsCollection).document(name).update(membersKey, FieldValue.arrayUnion(email),
                 sizeKey, FieldValue.increment(1));
 
-        HashMap<String, Object> map = new HashMap<>();
-
-        map.put(teamNameKey, name);
-        map.put(captainKey, captain);
-        map.put(capIDKey, capID);
-        map.put(descriptionKey, description);
-        map.put(sizeKey, size);
         fs.collection(User.usersCollection).document(email).update(User.joinedTeamsKey, FieldValue.arrayUnion(name));
     }
 

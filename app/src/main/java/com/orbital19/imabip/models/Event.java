@@ -5,6 +5,7 @@ import android.widget.ArrayAdapter;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.orbital19.imabip.teams.models.Team;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class Event implements Serializable, Comparable<Event> {
     public static String availableEventCollection = "AvailableEvents";
     public static String contactKey = "Contact";
     public static String descriptionKey = "Description";
-    public static String hostIDKey = "Host";
+    public static String hostIDKey = "Host"; // can be idividual or team
     public static String nameKey = "Name";
     public static String typeKey = "Type";
     public static String venueKey = "Venue";
@@ -26,6 +27,7 @@ public class Event implements Serializable, Comparable<Event> {
     public static String enrolledKey = "Enrolled";
     public static String playersKey = "Players";
     public static String idKey = "ID";
+    public static String byTeamKey = "ByTeam";
 
 
     private String ID;
@@ -40,11 +42,12 @@ public class Event implements Serializable, Comparable<Event> {
     private Long Enrolled;
     private ArrayList<String> Players;
     private HashMap<String, Integer> monthValues = new HashMap<>();
+    private boolean ByTeam;
     private long millisValue = 0;
 
 
     public Event(ArrayList<String> contact, String desc, String host, String name, String type, String venue,
-                 String time, Long size, Long enrolled) {
+                 String time, Long size, Long enrolled, boolean byTeam) {
         Contact.add(0, contact.get(0)); // email
         Contact.add(1, contact.get(1)); // phone
         Description = desc;
@@ -58,6 +61,7 @@ public class Event implements Serializable, Comparable<Event> {
         ID = Contact.get(0).substring(0, 6) + host + time.substring(0, 3)
                 + time.substring(4, 6) + time.substring(10, 15) + time.substring(15) + type + venue;
         Players = new ArrayList<>();
+        ByTeam = byTeam;
     }
 
     public ArrayList<String> getContact() { return Contact; }
@@ -86,8 +90,30 @@ public class Event implements Serializable, Comparable<Event> {
         event.put(partySizeKey, PartySize);
         event.put(enrolledKey, Enrolled);
         event.put(idKey, ID);
+        event.put(byTeamKey, ByTeam);
 
         db.collection(availableEventCollection).document(ID).set(event);
+    }
+
+    public void toTeamActivities(String team) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Map<String, Object> event = new HashMap<>();
+
+        event.put(contactKey, Contact);
+        event.put(descriptionKey, Description);
+        event.put(hostIDKey, HostID);
+        event.put(nameKey, Name);
+        event.put(venueKey, Venue);
+        event.put(typeKey, Type);
+        event.put(evTimeKey, EvTime);
+        event.put(partySizeKey, PartySize);
+        event.put(enrolledKey, Enrolled);
+        event.put(idKey, ID);
+        event.put(byTeamKey, ByTeam);
+
+        db.collection(Team.teamsCollection).document(team).collection(Team.teamActivitiesCollection)
+                .document(ID).set(event);
     }
 
     public void toUserHistory(String email) {
@@ -105,6 +131,7 @@ public class Event implements Serializable, Comparable<Event> {
         event.put(partySizeKey, PartySize);
         event.put(enrolledKey, Enrolled);
         event.put(idKey, ID);
+        event.put(byTeamKey, ByTeam);
 
         db.collection(User.usersCollection).document(email).collection(User.historyCollection)
                 .document(ID).set(event);

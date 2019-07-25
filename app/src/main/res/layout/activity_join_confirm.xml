@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".JoinConfirmActivity"
+
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/identity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Identity"
+        android:gravity="center"
+        android:textSize="16dp"
+        android:paddingTop="5dp"/>
+
+    <Button
+        android:id="@+id/identity_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="select"
+        android:background="@color/WhiteSmoke"/>
+
+    <EditText
+        android:id="@+id/participants"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Participants"
+        android:gravity="center"
+        android:textSize="16dp"
+        android:paddingTop="20dp"
+        android:inputType="number"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/confirm_join"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="confirm"
+        android:layout_marginTop="50dp"
+        android:background="@color/WhiteSmoke"/>
+
+</LinearLayout>

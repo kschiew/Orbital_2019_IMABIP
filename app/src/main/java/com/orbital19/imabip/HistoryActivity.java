@@ -89,7 +89,7 @@ public class HistoryActivity extends AppCompatActivity {
                             (String) doc.get(Event.hostIDKey), (String) doc.get(Event.nameKey),
                             (String) doc.get(Event.typeKey), (String) doc.get(Event.venueKey),
                             (String) doc.get(Event.evTimeKey), (Long) doc.get(Event.partySizeKey),
-                            (Long) doc.get(Event.enrolledKey));
+                            (Long) doc.get(Event.enrolledKey), false);
 
                     events.add(EV);
                 }
