@@ -182,7 +182,15 @@ public class Chosen extends AppCompatActivity {
             }
         });
 
-        if (bundle.getBoolean("hosting")) {
+        if (bundle.getBoolean("FromTeam")) {
+            partyTV.setText(String.format(Locale.getDefault(),
+                    "Players needed: %d", bundle.getInt("Needed slots")));
+            joinedSignTV.setVisibility(View.GONE);
+            toDrop.setVisibility(View.GONE);
+            toJoin.setVisibility(View.GONE);
+            toEdit.setVisibility(View.GONE);
+            toRehost.setVisibility(View.GONE);
+        } else if (bundle.getBoolean("hosting")) {
             joinedSignTV.setVisibility(View.GONE);
             toDrop.setVisibility(View.GONE);
             toJoin.setVisibility(View.GONE);

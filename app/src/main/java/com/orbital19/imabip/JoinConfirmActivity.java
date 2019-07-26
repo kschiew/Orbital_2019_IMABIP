@@ -32,6 +32,7 @@ import com.orbital19.imabip.teams.models.Team;
 import com.orbital19.imabip.works.StartingNotifyWorker;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class JoinConfirmActivity extends AppCompatActivity {
@@ -131,6 +132,7 @@ public class JoinConfirmActivity extends AppCompatActivity {
                 if (idenTV.getText().toString().equals("Identity")) {
                     Toast.makeText(getApplicationContext(), "Missing information", Toast.LENGTH_LONG).show();
                 } else if (idenTV.getText().toString().equals("Individual")) {
+                    // individual player
                     FirebaseUser current = FirebaseAuth.getInstance().getCurrentUser();
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -190,11 +192,14 @@ public class JoinConfirmActivity extends AppCompatActivity {
                 } else if (Integer.parseInt(partiET.getText().toString()) >= ev.getPartySize()-ev.getEnrolled()) {
                     Toast.makeText(getApplicationContext(), "Not enough player slots", Toast.LENGTH_LONG).show();
                 } else {
+                    // team
                     Long toPlay = Long.parseLong(partiET.getText().toString());
                     String team = idenTV.getText().toString();
 
                     FirebaseFirestore fs = FirebaseFirestore.getInstance();
-                    fs.collection(Team.teamsCollection).document(team).update(Team.teamJoinedKey, FieldValue.arrayUnion(ev.getID()));
+                    String encoder = String.format(Locale.getDefault(), "%d__", toPlay);
+                    fs.collection(Team.teamsCollection).document(team)
+                            .update(Team.teamJoinedKey, FieldValue.arrayUnion(encoder + ev.getID()));
                     fs.collection(Event.availableEventCollection).document(ev.getID()).update(Event.enrolledKey, FieldValue.increment(toPlay));
 
                     String notiTag = ev.getID();

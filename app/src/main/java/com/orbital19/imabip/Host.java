@@ -31,6 +31,7 @@ import com.orbital19.imabip.teams.models.Team;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 
 public class Host extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -174,8 +175,9 @@ public class Host extends AppCompatActivity implements DatePickerDialog.OnDateSe
                         Long.parseLong(inputs[9]), Long.parseLong(inputs[8]), true);
 
                 ev.createEntry();
+                String encoder = String.format(Locale.getDefault(),"%d__", inputs[8]);
                 fs.collection(Team.teamsCollection).document(tmName)
-                        .update(Team.teamHostingKey, FieldValue.arrayUnion(ev.getID()));
+                        .update(Team.teamHostingKey, FieldValue.arrayUnion(encoder+ev.getID()));
             }
         });
     }

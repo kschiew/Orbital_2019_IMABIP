@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/team_eventName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:text="Event name"
+        app:layout_constraintBottom_toTopOf="@id/team_type"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="20dp"
+        android:textColor="@color/Blue"/>
+
+    <TextView
+        android:id="@+id/team_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:text="Sport"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/team_eventName"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/team_host"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:text="Host"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/team_type" />
+
+    <TextView
+        android:id="@+id/team_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:text="Date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/team_host" />
+
+    <TextView
+        android:id="@+id/team_venue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:text="Venue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/team_time" />
+
+    <TextView
+        android:id="@+id/team_player_slots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Player slots"
+        android:paddingLeft="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/team_venue" />
+
+</android.support.constraint.ConstraintLayout>

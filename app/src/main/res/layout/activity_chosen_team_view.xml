@@ -62,6 +62,17 @@
         android:paddingTop="10dp"
         android:paddingStart="32dp"/>
 
+    <TextView
+        android:id="@+id/team_activities_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Activities"
+        android:textStyle="italic"
+        android:textSize="16dp"
+        android:textColor="@color/DarkGreen"
+        android:paddingTop="10dp"
+        android:paddingStart="16dp"/>
+
     <Button
         android:id="@+id/leave_team_btn"
         android:layout_width="wrap_content"

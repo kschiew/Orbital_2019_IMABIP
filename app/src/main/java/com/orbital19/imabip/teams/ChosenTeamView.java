@@ -47,6 +47,7 @@ public class ChosenTeamView extends AppCompatActivity {
         TextView descTV = findViewById(R.id.team_description_view);
         TextView sizeTV = findViewById(R.id.team_size_view);
         TextView membTV = findViewById(R.id.team_members_view);
+        TextView actiTV = findViewById(R.id.team_activities_view);
         Button leaveBtn = findViewById(R.id.leave_team_btn);
         Button joinBtn = findViewById(R.id.join_team_btn);
 
@@ -70,6 +71,34 @@ public class ChosenTeamView extends AppCompatActivity {
         if (bundle.getBoolean("Joined")) {
             leaveBtn.setVisibility(View.VISIBLE);
             joinBtn.setVisibility(View.GONE);
+            actiTV.setVisibility(View.VISIBLE);
+
+            actiTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final ArrayList<String> gamesList = new ArrayList<>();
+                    fs.collection(Team.teamsCollection).document(tm.getName())
+                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            DocumentSnapshot team = task.getResult();
+
+                            if (team.exists()) {
+                                gamesList.addAll((ArrayList<String>) team.get(Team.teamHostingKey));
+                                gamesList.addAll((ArrayList<String>) team.get(Team.teamJoinedKey));
+
+                                Intent intent1 = new Intent(getApplicationContext(), ViewTeamActivities.class);
+                                intent1.putExtra("Team", tm);
+                                intent1.putExtra("Game List", gamesList);
+
+                                startActivity(intent1);
+                            }
+                        }
+                    });
+
+
+                }
+            });
 
             final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             leaveBtn.setOnClickListener(new View.OnClickListener() {

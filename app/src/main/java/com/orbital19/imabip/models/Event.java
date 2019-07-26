@@ -28,6 +28,7 @@ public class Event implements Serializable, Comparable<Event> {
     public static String playersKey = "Players";
     public static String idKey = "ID";
     public static String byTeamKey = "ByTeam";
+    public static String teamSlotsKey = "TeamSlots"; // each entry is mapped teamName - slots
 
 
     private String ID;
@@ -91,29 +92,9 @@ public class Event implements Serializable, Comparable<Event> {
         event.put(enrolledKey, Enrolled);
         event.put(idKey, ID);
         event.put(byTeamKey, ByTeam);
+        event.put(teamSlotsKey, new HashMap<String, Long>());
 
         db.collection(availableEventCollection).document(ID).set(event);
-    }
-
-    public void toTeamActivities(String team) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        Map<String, Object> event = new HashMap<>();
-
-        event.put(contactKey, Contact);
-        event.put(descriptionKey, Description);
-        event.put(hostIDKey, HostID);
-        event.put(nameKey, Name);
-        event.put(venueKey, Venue);
-        event.put(typeKey, Type);
-        event.put(evTimeKey, EvTime);
-        event.put(partySizeKey, PartySize);
-        event.put(enrolledKey, Enrolled);
-        event.put(idKey, ID);
-        event.put(byTeamKey, ByTeam);
-
-        db.collection(Team.teamsCollection).document(team).collection(Team.teamActivitiesCollection)
-                .document(ID).set(event);
     }
 
     public void toUserHistory(String email) {
@@ -132,6 +113,7 @@ public class Event implements Serializable, Comparable<Event> {
         event.put(enrolledKey, Enrolled);
         event.put(idKey, ID);
         event.put(byTeamKey, ByTeam);
+        event.put(teamSlotsKey, new HashMap<String, Long>());
 
         db.collection(User.usersCollection).document(email).collection(User.historyCollection)
                 .document(ID).set(event);
