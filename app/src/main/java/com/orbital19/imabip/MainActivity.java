@@ -22,12 +22,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.orbital19.imabip.models.User;
 import com.orbital19.imabip.works.FilteringDataWorker;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 
@@ -155,6 +157,33 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+        attachRealtimeListenersToGames(user.getEmail());
+    }
+
+    private void attachRealtimeListenersToGames(String userEmail) {
+        FirebaseFirestore fs = FirebaseFirestore.getInstance();
+        final ArrayList<String> enrolledList = new ArrayList<>();
+        final ArrayList<String> hostingList = new ArrayList<>();
+        final ArrayList<String> teamsList = new ArrayList<>();
+
+        fs.collection(User.usersCollection).document(userEmail)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot doc = task.getResult();
+
+                if (doc.exists()) {
+                    enrolledList.addAll((ArrayList<String>) doc.get(User.enrolledKey));
+                    hostingList.addAll((ArrayList<String>) doc.get(User.hostingKey));
+                    teamsList.addAll((ArrayList<String>) doc.get(User.joinedTeamsKey));
+
+
+                }
+            }
+        });
+
+
     }
 
     @Override

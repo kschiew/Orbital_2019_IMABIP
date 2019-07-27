@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.Chosen;
@@ -35,6 +36,7 @@ public class ViewTeamActivities extends AppCompatActivity {
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
 
+        final String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         final Team tm = (Team) bundle.getSerializable("Team");
         final ArrayList<String> unmodGamesList = (ArrayList<String>) bundle.getSerializable("Game List");
         final ArrayList<String> gameList = new ArrayList<>();
@@ -62,6 +64,9 @@ public class ViewTeamActivities extends AppCompatActivity {
                 intent.putExtra("Event", event);
                 intent.putExtra("FromTeam", true);
                 intent.putExtra("Needed slots", slotsList[position]);
+                intent.putExtra("Encoded item", unmodGamesList.get(position));
+                intent.putExtra("AsCaptain", userEmail.equals(tm.getCaptain()));
+                intent.putExtra("TeamInfo", tm);
 
                 startActivity(intent);
             }

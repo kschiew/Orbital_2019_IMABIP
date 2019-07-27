@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Chosen extends AppCompatActivity {
 
-    private Button toJoin, toEdit, toRehost, toDrop, pickIdentity;
+    private Button toJoin, toEdit, toRehost, toDrop, capDrop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class Chosen extends AppCompatActivity {
         setContentView(R.layout.activity_chosen);
 
         final Intent intent = this.getIntent();
-        Bundle bundle = intent.getExtras();
+        final Bundle bundle = intent.getExtras();
         final Event ev = (Event) bundle.getSerializable("Event");
         View view = findViewById(R.id.chosen_act);
 
@@ -190,12 +190,41 @@ public class Chosen extends AppCompatActivity {
             toJoin.setVisibility(View.GONE);
             toEdit.setVisibility(View.GONE);
             toRehost.setVisibility(View.GONE);
+            if (bundle.getBoolean("AsCaptain")) {
+                capDrop = findViewById(R.id.ev_drop_out_captain);
+                capDrop.setVisibility(View.VISIBLE);
+                final Team tm = (Team) bundle.getSerializable("TeamInfo");
+                final String encoded = bundle.getString("Encoded item");
+                capDrop.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FirebaseFirestore fs = FirebaseFirestore.getInstance();
+
+                        if (ev.getHost().equals(tm.getName())) {
+                            // team is hosting
+                            fs.collection(Team.teamsCollection).document(tm.getName())
+                                    .update(Team.teamHostingKey, FieldValue.arrayRemove(encoded));
+                            fs.collection(Event.availableEventCollection).document(ev.getID())
+                                    .delete();
+                        } else {
+                            // team is not hosting
+                            fs.collection(Team.teamsCollection).document(tm.getName())
+                                    .update(Team.teamJoinedKey, FieldValue.arrayRemove(ev.getID()));
+                            fs.collection(Event.availableEventCollection).document(ev.getID())
+                                    .update(Event.enrolledKey, FieldValue.increment(bundle.getInt("Needed slots")),
+                                            Event.playersKey, FieldValue.arrayRemove("*team*_" + tm.getName()));
+                        }
+
+                    }
+                });
+            }
         } else if (bundle.getBoolean("hosting")) {
             joinedSignTV.setVisibility(View.GONE);
             toDrop.setVisibility(View.GONE);
             toJoin.setVisibility(View.GONE);
             toEdit.setVisibility(View.VISIBLE);
             toRehost.setVisibility(View.GONE);
+            capDrop.setVisibility(View.GONE);
         } else if (!bundle.getBoolean("History")){
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseFirestore.getInstance().collection(User.usersCollection).document(user.getEmail())
@@ -209,11 +238,13 @@ public class Chosen extends AppCompatActivity {
                         toDrop.setVisibility(View.VISIBLE);
                         toJoin.setVisibility(View.GONE);
                         toRehost.setVisibility(View.GONE);
+                        capDrop.setVisibility(View.GONE);
                     } else {
                         joinedSignTV.setVisibility(View.GONE);
                         toDrop.setVisibility(View.GONE);
                         toJoin.setVisibility(View.VISIBLE);
                         toRehost.setVisibility(View.GONE);
+                        capDrop.setVisibility(View.GONE);
                     }
                 }
             });
@@ -223,6 +254,7 @@ public class Chosen extends AppCompatActivity {
             joinedSignTV.setVisibility(View.GONE);
             toDrop.setVisibility(View.GONE);
             toRehost.setVisibility(View.VISIBLE);
+            capDrop.setVisibility(View.GONE);
         }
     }
 

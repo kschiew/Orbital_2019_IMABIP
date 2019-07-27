@@ -55,6 +55,7 @@ public class HistoryActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Chosen.class);
                 intent.putExtra("Event", ev);
                 intent.putExtra("History", true);
+                intent.putExtra("FromTeam", false);
                 startActivity(intent);
             }
         });

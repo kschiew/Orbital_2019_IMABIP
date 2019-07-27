@@ -63,6 +63,7 @@ public class fragment_hostingList extends Fragment {
                 intent.putExtra("Event", ev);
                 intent.putExtra("hosting", true);
                 intent.putExtra("History", false);
+                intent.putExtra("FromTeam", false);
                 startActivity(intent);
             }
         });

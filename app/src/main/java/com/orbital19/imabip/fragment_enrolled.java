@@ -63,6 +63,7 @@ public class fragment_enrolled extends Fragment {
                 Intent intent = new Intent(getContext(), Chosen.class);
                 intent.putExtra("Event", ev);
                 intent.putExtra("History", false);
+                intent.putExtra("FromTeam", false);
                 startActivity(intent);
             }
         });
