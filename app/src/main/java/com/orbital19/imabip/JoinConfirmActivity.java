@@ -74,57 +74,87 @@ public class JoinConfirmActivity extends AppCompatActivity {
                         DocumentSnapshot doc = task.getResult();
 
                         if (doc.exists()) {
+                            Log.d("Identity to join", "Begin");
 
+                            ArrayList<String> caps = new ArrayList<>();
+                            caps.addAll((ArrayList<String>) doc.get(User.captainOfKey));
 
-                            ArrayList<String> caps = (ArrayList<String>) doc.get(User.captainOfKey);
+                            if (caps.size() > 0) {
+                                for (final String team : caps) {
+                                    FirebaseFirestore.getInstance().collection(Team.teamsCollection)
+                                            .document(team).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            DocumentSnapshot doc = task.getResult();
 
-                            for (final String team : caps) {
-                                FirebaseFirestore.getInstance().collection(Team.teamsCollection)
-                                        .document(team).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        DocumentSnapshot doc = task.getResult();
+                                            if (doc.exists()) {
+                                                Log.d("Identity to join", "Working");
+                                                ArrayList<String> teamJoined = (ArrayList<String>)
+                                                        doc.get(Team.teamJoinedKey);
+                                                ArrayList<String> decoded = new ArrayList<>();
+                                                for (String s : teamJoined)
+                                                    decoded.add(s.split("__", 0)[1]);
 
-                                        if (doc.exists()) {
-                                            ArrayList<String> teamJoined = (ArrayList<String>)
-                                                                doc.get(Team.teamJoinedKey);
-                                            ArrayList<String> decoded = new ArrayList<>();
-                                            for (String s : teamJoined)
-                                                decoded.add(s.split("__", 0)[1]);
-
-                                            if (!decoded.contains(ev.getID())) {
-                                                Log.d("Identity", team);
-                                                options.add(team);
-                                            }
-                                        }
-
-                                        final CharSequence[] arr = new CharSequence[options.size()];
-                                        options.toArray(arr);
-
-                                        picker.setTitle("Pick identity").setSingleChoiceItems(arr, -1, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                idenTV.setText(arr[which]);
-                                                if (which > 0) {
-                                                    partiET.setHint("Max: " + (ev.getPartySize() - ev.getEnrolled()));
-                                                    partiET.setVisibility(View.VISIBLE);
+                                                if (!decoded.contains(ev.getID())) {
+                                                    Log.d("Identity", team);
+                                                    options.add(team);
                                                 }
                                             }
-                                        }).setPositiveButton("Choose", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
 
-                                            }
-                                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
+                                            final CharSequence[] arr = new CharSequence[options.size()];
+                                            options.toArray(arr);
 
-                                            }
-                                        });
+                                            picker.setTitle("Pick identity").setSingleChoiceItems(arr, -1, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    idenTV.setText(arr[which]);
+                                                    if (which > 0) {
+                                                        partiET.setHint("Max: " + (ev.getPartySize() - ev.getEnrolled()));
+                                                        partiET.setVisibility(View.VISIBLE);
+                                                    }
+                                                }
+                                            }).setPositiveButton("Choose", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
 
-                                        picker.create().show();
+                                                }
+                                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                }
+                                            });
+
+                                            picker.create().show();
+                                        }
+                                    });
+                                }
+                            } else {
+                                final CharSequence[] arr = new CharSequence[options.size()];
+                                options.toArray(arr);
+
+                                picker.setTitle("Pick identity").setSingleChoiceItems(arr, -1, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        idenTV.setText(arr[which]);
+                                        if (which > 0) {
+                                            partiET.setHint("Max: " + (ev.getPartySize() - ev.getEnrolled()));
+                                            partiET.setVisibility(View.VISIBLE);
+                                        }
+                                    }
+                                }).setPositiveButton("Choose", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
                                     }
                                 });
+
+                                picker.create().show();
                             }
                         }
                     }

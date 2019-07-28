@@ -84,6 +84,24 @@ public final class DataManagement {
                             }
                         });
                     }
+
+                    for (final String teamName : (ArrayList<String>) document.get(User.captainOfKey)) {
+                        fs.collection(Team.teamsCollection).document(teamName)
+                                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                DocumentSnapshot doc = task.getResult();
+
+                                if (doc.exists()) {
+                                    teams.put(teamName, new Team((String) doc.get(Team.teamNameKey),
+                                            (String) doc.get(Team.captainKey),
+                                            (String) doc.get(Team.capIDKey),
+                                            (String) doc.get(Team.descriptionKey),
+                                            (Long) doc.get(Team.sizeKey)));
+                                }
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -129,9 +147,9 @@ public final class DataManagement {
 
             return "none";
         } else {
-            String gameName = enrolled.get(ID).getName();
+            Event game = enrolled.get(ID);
             enrolled.remove(ID);
-            return gameName;
+            return game == null ? "A game" : game.getName();
         }
     }
 

@@ -2,19 +2,26 @@ package com.orbital19.imabip;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.work.PeriodicWorkRequest;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,13 +56,30 @@ class HostingAdapter extends ArrayAdapter<Event> {
             @Override
             public void onClick(View v) {
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
                 db.collection(User.usersCollection).document(currentUser.getEmail())
                         .update(User.hostingKey, FieldValue.arrayRemove(cur.getID()));
 
                 db.collection(Event.availableEventCollection).document(cur.getID())
-                        .delete();
+                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        DocumentSnapshot doc = task.getResult();
+
+                        if (doc.exists()) {
+                            ArrayList<String> players = new ArrayList<>();
+                            players.addAll((ArrayList<String>) doc.get(Event.playersKey));
+                            for (String player : players)
+                                db.collection(User.usersCollection).document(player)
+                                    .update(User.enrolledKey, FieldValue.arrayRemove(cur.getID()));
+
+                            db.collection(Event.availableEventCollection).document(cur.getID())
+                                    .delete();
+                        }
+                    }
+                });
+
 
                 db.collection(User.usersCollection).document(currentUser.getEmail())
                         .collection(User.historyCollection).document(cur.getID()).delete();

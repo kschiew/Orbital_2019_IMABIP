@@ -326,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
         Notification.Builder notificationBuilder =
                 notificationsHelper.getNotificationGmRmved(
                         NotificationsHelper.GAME_REMOVED_TITLE,
-                        NotificationsHelper.GAME_REMOVED_BODY + name);
+                        name + NotificationsHelper.GAME_REMOVED_BODY);
 
         notificationsHelper.notify(NotificationsHelper.GAME_REMOVED_ID, notificationBuilder);
     }
