@@ -76,5 +76,5 @@
         android:paddingLeft="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/hostID"
-        android:visibility="invisible"/>
+        android:visibility="gone"/>
 </android.support.constraint.ConstraintLayout>

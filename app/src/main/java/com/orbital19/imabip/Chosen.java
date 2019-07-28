@@ -32,6 +32,7 @@ import com.orbital19.imabip.edits.EditHostActivity;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 import com.orbital19.imabip.models.user.DisplayUser;
+import com.orbital19.imabip.teams.MyTeamsActivity;
 import com.orbital19.imabip.teams.models.Team;
 import com.orbital19.imabip.works.StartingNotifyWorker;
 
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class Chosen extends AppCompatActivity {
@@ -199,7 +201,19 @@ public class Chosen extends AppCompatActivity {
                 capDrop.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FirebaseFirestore fs = FirebaseFirestore.getInstance();
+                        final FirebaseFirestore fs = FirebaseFirestore.getInstance();
+
+                        fs.collection(Event.availableEventCollection).document(ev.getID())
+                                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                Map<String, Object> teamSlots = (Map<String, Object>) task.getResult().get(Event.teamSlotsKey);
+
+                                teamSlots.remove(tm.getName());
+                                fs.collection(Event.availableEventCollection).document(ev.getID())
+                                        .update(Event.teamSlotsKey, teamSlots);
+                            }
+                        });
 
                         if (ev.getHost().equals(tm.getName())) {
                             // team is hosting
@@ -207,13 +221,17 @@ public class Chosen extends AppCompatActivity {
                                     .update(Team.teamHostingKey, FieldValue.arrayRemove(encoded));
                             fs.collection(Event.availableEventCollection).document(ev.getID())
                                     .delete();
+
+                            startActivity(new Intent(getApplicationContext(), MyTeamsActivity.class));
                         } else {
                             // team is not hosting
                             fs.collection(Team.teamsCollection).document(tm.getName())
-                                    .update(Team.teamJoinedKey, FieldValue.arrayRemove(ev.getID()));
+                                    .update(Team.teamJoinedKey, FieldValue.arrayRemove(encoded));
                             fs.collection(Event.availableEventCollection).document(ev.getID())
-                                    .update(Event.enrolledKey, FieldValue.increment(bundle.getInt("Needed slots")),
+                                    .update(Event.enrolledKey, FieldValue.increment(-bundle.getInt("Needed slots")),
                                             Event.playersKey, FieldValue.arrayRemove("*team*_" + tm.getName()));
+
+                            startActivity(new Intent(getApplicationContext(), MyTeamsActivity.class));
                         }
 
                     }

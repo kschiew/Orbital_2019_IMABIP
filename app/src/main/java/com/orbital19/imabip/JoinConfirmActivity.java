@@ -33,6 +33,7 @@ import com.orbital19.imabip.works.StartingNotifyWorker;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class JoinConfirmActivity extends AppCompatActivity {
@@ -87,39 +88,44 @@ public class JoinConfirmActivity extends AppCompatActivity {
                                         if (doc.exists()) {
                                             ArrayList<String> teamJoined = (ArrayList<String>)
                                                                 doc.get(Team.teamJoinedKey);
-                                            if (!teamJoined.contains(ev.getID()))
+                                            ArrayList<String> decoded = new ArrayList<>();
+                                            for (String s : teamJoined)
+                                                decoded.add(s.split("__", 0)[1]);
+
+                                            if (!decoded.contains(ev.getID())) {
+                                                Log.d("Identity", team);
                                                 options.add(team);
+                                            }
                                         }
+
+                                        final CharSequence[] arr = new CharSequence[options.size()];
+                                        options.toArray(arr);
+
+                                        picker.setTitle("Pick identity").setSingleChoiceItems(arr, -1, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                idenTV.setText(arr[which]);
+                                                if (which > 0) {
+                                                    partiET.setHint("Max: " + (ev.getPartySize() - ev.getEnrolled()));
+                                                    partiET.setVisibility(View.VISIBLE);
+                                                }
+                                            }
+                                        }).setPositiveButton("Choose", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        });
+
+                                        picker.create().show();
                                     }
                                 });
                             }
-
-
-                            final CharSequence[] arr = new CharSequence[options.size()];
-                            options.toArray(arr);
-
-                            picker.setTitle("Pick identity").setSingleChoiceItems(arr, -1, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    idenTV.setText(arr[which]);
-                                    if (which > 0) {
-                                        partiET.setHint("Max: " + (ev.getPartySize() - ev.getEnrolled()));
-                                        partiET.setVisibility(View.VISIBLE);
-                                    }
-                                }
-                            }).setPositiveButton("Choose", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            });
-
-                            picker.create().show();
                         }
                     }
                 });
@@ -189,18 +195,29 @@ public class JoinConfirmActivity extends AppCompatActivity {
                     finish();
                 } else if (Strings.isEmptyOrWhitespace(partiET.getText().toString())) { // as a team
                     Toast.makeText(getApplicationContext(), "Missing information", Toast.LENGTH_LONG).show();
-                } else if (Integer.parseInt(partiET.getText().toString()) >= ev.getPartySize()-ev.getEnrolled()) {
+                } else if (Integer.parseInt(partiET.getText().toString()) > ev.getPartySize()-ev.getEnrolled()) {
                     Toast.makeText(getApplicationContext(), "Not enough player slots", Toast.LENGTH_LONG).show();
                 } else {
                     // team
-                    Long toPlay = Long.parseLong(partiET.getText().toString());
-                    String team = idenTV.getText().toString();
+                    final Long toPlay = Long.parseLong(partiET.getText().toString());
+                    final String team = idenTV.getText().toString();
 
-                    FirebaseFirestore fs = FirebaseFirestore.getInstance();
+                    final FirebaseFirestore fs = FirebaseFirestore.getInstance();
                     String encoder = String.format(Locale.getDefault(), "%d__", toPlay);
                     fs.collection(Team.teamsCollection).document(team)
                             .update(Team.teamJoinedKey, FieldValue.arrayUnion(encoder + ev.getID()));
                     fs.collection(Event.availableEventCollection).document(ev.getID()).update(Event.enrolledKey, FieldValue.increment(toPlay));
+                    fs.collection(Event.availableEventCollection).document(ev.getID())
+                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            Map<String, Object> teamSlots = (Map<String, Object>) task.getResult().get(Event.teamSlotsKey);
+
+                            teamSlots.put(team, toPlay);
+                            fs.collection(Event.availableEventCollection).document(ev.getID())
+                                    .update(Event.teamSlotsKey, teamSlots);
+                        }
+                    });
 
                     String notiTag = ev.getID();
 

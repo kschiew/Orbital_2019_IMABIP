@@ -8,15 +8,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.Chosen;
 import com.orbital19.imabip.R;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.teams.models.Team;
+import com.orbital19.imabip.works.FilteringDataWorker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +37,11 @@ public class ViewTeamActivities extends AppCompatActivity {
         setContentView(R.layout.activity_view_team_activities);
 
         getSupportActionBar().setTitle("Team's activities");
+
+        WorkManager workManager = WorkManager.getInstance();
+        OneTimeWorkRequest update = new OneTimeWorkRequest.Builder(FilteringDataWorker.class)
+                .addTag("Filter").build();
+        workManager.enqueue(update);
 
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
@@ -52,7 +62,7 @@ public class ViewTeamActivities extends AppCompatActivity {
             i++;
         }
 
-        loadGames(gameList);
+        loadGames(gameList, tm.getName());
         viewTeamActivitiesAdapter = new ViewTeamActivitiesAdapter(getApplicationContext(), games, tm);
 
         listView.setAdapter(viewTeamActivitiesAdapter);
@@ -73,12 +83,12 @@ public class ViewTeamActivities extends AppCompatActivity {
         });
     }
 
-    private void loadGames(ArrayList<String> gameList) {
-        FirebaseFirestore fs = FirebaseFirestore.getInstance();
+    private void loadGames(ArrayList<String> gameList, final String tmName) {
+        final FirebaseFirestore fs = FirebaseFirestore.getInstance();
 
         games.removeAll(games);
 
-        for (String s : gameList) {
+        for (final String s : gameList) {
             fs.collection(Event.availableEventCollection).document(s)
                     .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -95,6 +105,10 @@ public class ViewTeamActivities extends AppCompatActivity {
                         games.add(EV);
 
                         viewTeamActivitiesAdapter.notifyDataSetChanged();
+                    } else {
+                        fs.collection(Team.teamsCollection).document(tmName)
+                                .update(Team.teamJoinedKey, FieldValue.arrayRemove(s),
+                                        Team.teamHostingKey, FieldValue.arrayRemove(s));
                     }
                 }
             });

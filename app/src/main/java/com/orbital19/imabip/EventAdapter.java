@@ -68,7 +68,7 @@ public class EventAdapter extends ArrayAdapter<Event> {
                 if (lst.contains(cur.getID()))
                     joinedTV.setVisibility(View.VISIBLE);
                 else
-                    joinedTV.setVisibility(View.INVISIBLE);
+                    joinedTV.setVisibility(View.GONE);
 
             }
         });

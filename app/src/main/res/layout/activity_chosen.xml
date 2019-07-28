@@ -122,7 +122,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_gravity="center"
-        android:text="Drop"
+        android:text="Team Drop"
         android:textColor="@color/DarkRed"
         android:visibility="gone"/>
 
