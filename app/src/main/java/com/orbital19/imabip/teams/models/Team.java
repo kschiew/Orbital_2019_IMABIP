@@ -9,11 +9,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Team implements Serializable, Comparable<Team> {
     public static String teamsCollection = "ActiveTeams";
@@ -74,8 +76,37 @@ public class Team implements Serializable, Comparable<Team> {
                         Log.d("Deleting team", email);
                         fs.collection(User.usersCollection).document(email)
                                 .update(User.joinedTeamsKey, FieldValue.arrayRemove(name));
-
                     }
+                    ArrayList<String> hostingGames = new ArrayList<>();
+                    hostingGames.addAll((ArrayList<String>) doc.get(teamHostingKey));
+                    for (String game : hostingGames) {
+                        Log.d("Deleting team's games", game);
+                        String id = game.split("__", 0)[1];
+                        fs.collection(Event.availableEventCollection).document(id)
+                                .delete();
+                    }
+                    ArrayList<String> joinedGames = new ArrayList<>();
+                    joinedGames.addAll((ArrayList<String>) doc.get(teamJoinedKey));
+                    for (String gm : joinedGames) {
+                        Log.d("Leaving team's games", gm);
+                        final String[] parts = gm.split("__", 0);
+
+                        fs.collection(Event.availableEventCollection).document(parts[1])
+                                .update(Event.enrolledKey, FieldValue.increment(-Integer.parseInt(parts[0])),
+                                        Event.playersKey, FieldValue.arrayRemove("*team*_" + name));
+                        fs.collection(Event.availableEventCollection).document(parts[1])
+                                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                Map<String, Object> teamSlots = (Map<String, Object>) task.getResult().get(Event.teamSlotsKey);
+
+                                teamSlots.remove(name);
+                                fs.collection(Event.availableEventCollection).document(parts[1])
+                                        .update(Event.teamSlotsKey, teamSlots);
+                            }
+                        });
+                    }
+
                 }
 
                 fs.collection(User.usersCollection).document(captain).

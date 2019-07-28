@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 
 /*
@@ -118,7 +119,7 @@ public class EditHostActivity extends AppCompatActivity implements DatePickerDia
 
     private void showIdentityDialog() {
         final AlertDialog.Builder identityDialog = new AlertDialog.Builder(this);
- 
+
         final ArrayList<CharSequence> options = new ArrayList<>();
 
         options.add("Individual");
@@ -242,8 +243,12 @@ public class EditHostActivity extends AppCompatActivity implements DatePickerDia
 
                 ev.createEntry();
                 String encoder = inputs[8] + "__";
+                Map<String, Object> slots = new HashMap<>();
+                slots.put(tmName, Long.parseLong(inputs[8]));
                 fs.collection(Team.teamsCollection).document(tmName)
                         .update(Team.teamHostingKey, FieldValue.arrayUnion(encoder+ev.getID()));
+                fs.collection(Event.availableEventCollection).document(ev.getID())
+                        .update(Event.teamSlotsKey, slots);
             }
         });
     }
