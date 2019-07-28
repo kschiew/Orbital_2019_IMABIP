@@ -55,6 +55,8 @@
 
     <string name="notification_channel_participant">Participant Notification Channel</string>
     <string name="notification_channel_starting">Starting Notification Channel</string>
+    <string name="notification_channel_game_removed">Game removed Notification Channel</string>
+    <string name="notification_channel_team">Team Notification Channel</string>
 
     <string name="starting_notification_body">%1$s is starting soon!</string>
     <string name="started_notification_body">%1$s has started!</string>

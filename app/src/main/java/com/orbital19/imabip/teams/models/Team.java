@@ -25,6 +25,7 @@ public class Team implements Serializable, Comparable<Team> {
     public static String descriptionKey = "Description";
     public static String teamHostingKey = "Hosting"; // array
     public static String teamJoinedKey = "Participating"; // array
+    public static String teamTotalGames = "Number of games";
     public static String teamActivitiesCollection = "Activities"; // collection
 
     private String name, description, captain, capID;
@@ -49,6 +50,7 @@ public class Team implements Serializable, Comparable<Team> {
         map.put(membersKey, new ArrayList<>());
         map.put(teamHostingKey, new ArrayList<>());
         map.put(teamJoinedKey, new ArrayList<>());
+        map.put(teamTotalGames, 0);
 
         FirebaseFirestore fs = FirebaseFirestore.getInstance();
 

@@ -182,6 +182,8 @@ public class Chosen extends AppCompatActivity {
             }
         });
 
+        capDrop = findViewById(R.id.ev_drop_out_captain);
+
         if (bundle.getBoolean("FromTeam")) {
             partyTV.setText(String.format(Locale.getDefault(),
                     "Players needed: %d", bundle.getInt("Needed slots")));
@@ -191,7 +193,6 @@ public class Chosen extends AppCompatActivity {
             toEdit.setVisibility(View.GONE);
             toRehost.setVisibility(View.GONE);
             if (bundle.getBoolean("AsCaptain")) {
-                capDrop = findViewById(R.id.ev_drop_out_captain);
                 capDrop.setVisibility(View.VISIBLE);
                 final Team tm = (Team) bundle.getSerializable("TeamInfo");
                 final String encoded = bundle.getString("Encoded item");
