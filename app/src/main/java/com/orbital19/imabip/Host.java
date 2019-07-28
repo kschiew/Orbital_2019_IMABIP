@@ -175,7 +175,7 @@ public class Host extends AppCompatActivity implements DatePickerDialog.OnDateSe
                         Long.parseLong(inputs[9]), Long.parseLong(inputs[8]), true);
 
                 ev.createEntry();
-                String encoder = String.format(Locale.getDefault(),"%d__", inputs[8]);
+                String encoder = inputs[8] + "__";
                 fs.collection(Team.teamsCollection).document(tmName)
                         .update(Team.teamHostingKey, FieldValue.arrayUnion(encoder+ev.getID()));
             }
