@@ -69,13 +69,15 @@ class HostingAdapter extends ArrayAdapter<Event> {
 
                         if (doc.exists()) {
                             ArrayList<String> players = new ArrayList<>();
-                            players.addAll((ArrayList<String>) doc.get(Event.playersKey));
-                            for (String player : players)
-                                db.collection(User.usersCollection).document(player)
-                                    .update(User.enrolledKey, FieldValue.arrayRemove(cur.getID()));
+                            if (doc.get(Event.playersKey) != null) {
+                                players.addAll((ArrayList<String>) doc.get(Event.playersKey));
+                                for (String player : players)
+                                    db.collection(User.usersCollection).document(player)
+                                            .update(User.enrolledKey, FieldValue.arrayRemove(cur.getID()));
 
-                            db.collection(Event.availableEventCollection).document(cur.getID())
-                                    .delete();
+                                db.collection(Event.availableEventCollection).document(cur.getID())
+                                        .delete();
+                            }
                         }
                     }
                 });

@@ -218,11 +218,21 @@ public class EditHostActivity extends AppCompatActivity implements DatePickerDia
         } else if (lastInvalidCheck()) {
             Toast.makeText(getApplicationContext(), "Invalid game", Toast.LENGTH_SHORT).show();
         } else if (pickIdentity.getText().toString().equals("Individual")) {
+            FirebaseFirestore.getInstance().collection(Event.availableEventCollection)
+                    .document(event.getID()).delete();
+            FirebaseFirestore.getInstance().collection(User.usersCollection)
+                    .document(event.getHost()).collection(User.historyCollection)
+                    .document(event.getID()).delete();
             addNewEvent();
             addedToast();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         } else { // as a team
+            FirebaseFirestore.getInstance().collection(Event.availableEventCollection)
+                    .document(event.getID()).delete();
+            FirebaseFirestore.getInstance().collection(User.usersCollection)
+                    .document(event.getHost()).collection(User.historyCollection)
+                    .document(event.getID()).delete();
             String tmName = pickIdentity.getText().toString();
             addTeamEvent(tmName);
             addedToast();

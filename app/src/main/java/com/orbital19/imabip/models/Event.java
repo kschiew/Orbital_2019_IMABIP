@@ -93,6 +93,7 @@ public class Event implements Serializable, Comparable<Event> {
         event.put(idKey, ID);
         event.put(byTeamKey, ByTeam);
         event.put(teamSlotsKey, new HashMap<String, Long>());
+        event.put(playersKey, new ArrayList<>());
 
         db.collection(availableEventCollection).document(ID).set(event);
     }
@@ -114,6 +115,7 @@ public class Event implements Serializable, Comparable<Event> {
         event.put(idKey, ID);
         event.put(byTeamKey, ByTeam);
         event.put(teamSlotsKey, new HashMap<String, Long>());
+        event.put(playersKey, new ArrayList<>());
 
         db.collection(User.usersCollection).document(email).collection(User.historyCollection)
                 .document(ID).set(event);
