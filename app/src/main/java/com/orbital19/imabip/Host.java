@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.android.gms.common.util.Strings;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,12 +32,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 import com.orbital19.imabip.teams.models.Team;
+import com.orbital19.imabip.works.StartingNotifyWorker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 public class Host extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -183,6 +190,46 @@ public class Host extends AppCompatActivity implements DatePickerDialog.OnDateSe
                         .update(Team.teamHostingKey, FieldValue.arrayUnion(encoder+ev.getID()));
                 fs.collection(Event.availableEventCollection).document(ev.getID())
                         .update(Event.teamSlotsKey, slots);
+
+                String notiTag = ev.getID();
+
+                Data inputData = new Data.Builder().putString(NotificationsHelper.STARTING_KEY, notiTag).build();
+
+                long dOne = ev.delayOne();
+                OneTimeWorkRequest workOne = null;
+                if (dOne > 0) {
+                    workOne = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
+                            .setInitialDelay(dOne, TimeUnit.MILLISECONDS)
+                            .setInputData(inputData)
+                            .addTag(notiTag)
+                            .build();
+                }
+
+                long dTwo = ev.delayTwo();
+                OneTimeWorkRequest workTwo = null;
+                if (dTwo > 0) {
+                    workTwo = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
+                            .setInitialDelay(dTwo, TimeUnit.MILLISECONDS)
+                            .setInputData(inputData)
+                            .addTag(notiTag)
+                            .build();
+                }
+
+                OneTimeWorkRequest workThree = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
+                        .setInitialDelay(ev.delayExact(), TimeUnit.MILLISECONDS)
+                        .setInputData(inputData)
+                        .addTag(notiTag)
+                        .build();
+
+                WorkManager workManager = WorkManager.getInstance();
+
+                workManager.enqueue(workThree);
+
+                if (workOne != null) workManager.enqueue(workOne);
+                if (workTwo != null) workManager.enqueue(workTwo);
+
+
+                Log.d("Noti queued", "Planned notifications");
             }
         });
     }
@@ -286,6 +333,46 @@ public class Host extends AppCompatActivity implements DatePickerDialog.OnDateSe
 
                 fs.collection(User.usersCollection).document(currentUser.getEmail())
                         .update(User.hostingKey, FieldValue.arrayUnion(ev.getID()));
+
+                String notiTag = ev.getID();
+
+                Data inputData = new Data.Builder().putString(NotificationsHelper.STARTING_KEY, notiTag).build();
+
+                long dOne = ev.delayOne();
+                OneTimeWorkRequest workOne = null;
+                if (dOne > 0) {
+                    workOne = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
+                            .setInitialDelay(dOne, TimeUnit.MILLISECONDS)
+                            .setInputData(inputData)
+                            .addTag(notiTag)
+                            .build();
+                }
+
+                long dTwo = ev.delayTwo();
+                OneTimeWorkRequest workTwo = null;
+                if (dTwo > 0) {
+                    workTwo = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
+                            .setInitialDelay(dTwo, TimeUnit.MILLISECONDS)
+                            .setInputData(inputData)
+                            .addTag(notiTag)
+                            .build();
+                }
+
+                OneTimeWorkRequest workThree = new OneTimeWorkRequest.Builder(StartingNotifyWorker.class)
+                        .setInitialDelay(ev.delayExact(), TimeUnit.MILLISECONDS)
+                        .setInputData(inputData)
+                        .addTag(notiTag)
+                        .build();
+
+                WorkManager workManager = WorkManager.getInstance();
+
+                workManager.enqueue(workThree);
+
+                if (workOne != null) workManager.enqueue(workOne);
+                if (workTwo != null) workManager.enqueue(workTwo);
+
+
+                Log.d("Noti queued", "Planned notifications");
             }
         });
     }

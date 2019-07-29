@@ -32,8 +32,8 @@ public class NotificationsHelper extends ContextWrapper {
 
     public static final String GAME_REMOVED_CHANNEL = "game_removed";
     public static final String GAME_REMOVED_KEY = "Game removed";
-    public static final String GAME_REMOVED_TITLE = "Game cancelled";
-    public static final String GAME_REMOVED_BODY = " has been cancelled";
+    public static final String GAME_REMOVED_TITLE = "Game unvailable";
+    public static final String GAME_REMOVED_BODY = " is now unavailable";
     public static final int GAME_REMOVED_ID = 1300;
 
     public static final String TEAM_CHANNEL = "team";
