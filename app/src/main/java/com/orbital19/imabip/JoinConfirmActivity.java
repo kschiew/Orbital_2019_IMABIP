@@ -179,6 +179,8 @@ public class JoinConfirmActivity extends AppCompatActivity {
                     event.update(Event.enrolledKey, FieldValue.increment(1));
                     event.update(Event.playersKey, FieldValue.arrayUnion(current.getEmail()));
 
+                    ev.toUserHistory(current.getEmail());
+
                     String notiTag = ev.getID();
 
                     Data inputData = new Data.Builder().putString(NotificationsHelper.STARTING_KEY, notiTag).build();

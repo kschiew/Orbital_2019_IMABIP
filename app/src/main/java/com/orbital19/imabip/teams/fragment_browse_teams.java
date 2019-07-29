@@ -76,31 +76,33 @@ public class fragment_browse_teams extends Fragment {
 
                 if (doc.exists())
                     curTeams.addAll((ArrayList<String>) doc.get(User.joinedTeamsKey));
+
+
+                fs.collection(Team.teamsCollection).get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                List<DocumentSnapshot> lst = task.getResult().getDocuments();
+
+                                for (DocumentSnapshot doc : lst) {
+                                    Team team = new Team((String) doc.get(Team.teamNameKey),
+                                            (String) doc.get(Team.captainKey),
+                                            (String) doc.get(Team.capIDKey),
+                                            (String) doc.get(Team.descriptionKey),
+                                            (Long) doc.get(Team.sizeKey));
+
+                                    if (!team.getCaptain().equals(email) && !curTeams.contains(team.getName()))
+                                        teams.add(team);
+                                }
+
+                                Collections.sort(teams);
+
+                                teamAdapter.notifyDataSetChanged();
+                            }
+                        });
             }
         });
 
-        fs.collection(Team.teamsCollection).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<DocumentSnapshot> lst = task.getResult().getDocuments();
-
-                        for (DocumentSnapshot doc : lst) {
-                            Team team = new Team((String) doc.get(Team.teamNameKey),
-                                    (String) doc.get(Team.captainKey),
-                                    (String) doc.get(Team.capIDKey),
-                                    (String) doc.get(Team.descriptionKey),
-                                    (Long) doc.get(Team.sizeKey));
-
-                            if (!team.getCaptain().equals(email) && !curTeams.contains(team.getName()))
-                                teams.add(team);
-                        }
-
-                        Collections.sort(teams);
-
-                        teamAdapter.notifyDataSetChanged();
-                    }
-                });
     }
 
 

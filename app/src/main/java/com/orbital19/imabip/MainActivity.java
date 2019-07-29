@@ -67,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
             finish();
         } else {
 
+            dataManagement = new DataManagement(user.getEmail());
+
+            attachRealtimeListenersToGames(user.getEmail());
 
             FirebaseInstanceId.getInstance().getInstanceId()
                     .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -146,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
                     OneTimeWorkRequest update = new OneTimeWorkRequest.Builder(FilteringDataWorker.class).build();
                     workManager.cancelAllWorkByTag("Filter");
                     workManager.enqueue(update);
+                    dataManagement.update();
+                    attachRealtimeListenersToGames(user.getEmail());
                     Fragment frag = null;
                     switch (tabLayout.getSelectedTabPosition()) {
                         case 0:
@@ -166,9 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            dataManagement = new DataManagement(user.getEmail());
 
-            attachRealtimeListenersToGames(user.getEmail());
         }
 
     }
