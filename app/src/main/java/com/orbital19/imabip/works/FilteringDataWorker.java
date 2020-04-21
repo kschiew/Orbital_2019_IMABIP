@@ -56,24 +56,26 @@ public class FilteringDataWorker extends Worker {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot userDoc = task.getResult();
                 @NonNull ArrayList<String> hosting = (ArrayList<String>) userDoc.get(User.hostingKey);
-                for (final String game : hosting) {
-                    db.collection(Event.availableEventCollection).document(game)
-                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            DocumentSnapshot ev = task.getResult();
-                            if (ev.exists()) {
-                                String time = (String) ev.get(Event.evTimeKey);
-                                if (!gameYetToCome(time)) {
-                                    db.collection(User.usersCollection).document(email)
-                                            .update(User.hostingKey, FieldValue.arrayRemove(game));
+                if (hosting != null) {
+                    for (final String game : hosting) {
+                        db.collection(Event.availableEventCollection).document(game)
+                                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                DocumentSnapshot ev = task.getResult();
+                                if (ev.exists()) {
+                                    String time = (String) ev.get(Event.evTimeKey);
+                                    if (!gameYetToCome(time)) {
+                                        db.collection(User.usersCollection).document(email)
+                                                .update(User.hostingKey, FieldValue.arrayRemove(game));
 
-                                    db.collection(Event.availableEventCollection).document(game)
-                                            .delete();
+                                        db.collection(Event.availableEventCollection).document(game)
+                                                .delete();
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         });
@@ -86,24 +88,26 @@ public class FilteringDataWorker extends Worker {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot userDoc = task.getResult();
                 @NonNull ArrayList<String> enrolled = (ArrayList<String>) userDoc.get(User.enrolledKey);
-                for (final String game : enrolled) {
-                    db.collection(Event.availableEventCollection).document(game)
-                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            DocumentSnapshot ev = task.getResult();
-                            if (ev.exists()) {
-                                String time = (String) ev.get(Event.evTimeKey);
-                                if (!gameYetToCome(time)) {
-                                    db.collection(User.usersCollection).document(email)
-                                            .update(User.enrolledKey, FieldValue.arrayRemove(game));
+                if (enrolled != null) {
+                    for (final String game : enrolled) {
+                        db.collection(Event.availableEventCollection).document(game)
+                                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                DocumentSnapshot ev = task.getResult();
+                                if (ev.exists()) {
+                                    String time = (String) ev.get(Event.evTimeKey);
+                                    if (!gameYetToCome(time)) {
+                                        db.collection(User.usersCollection).document(email)
+                                                .update(User.enrolledKey, FieldValue.arrayRemove(game));
 
-                                    db.collection(Event.availableEventCollection).document(game)
-                                            .delete();
+                                        db.collection(Event.availableEventCollection).document(game)
+                                                .delete();
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         });
@@ -157,8 +161,8 @@ public class FilteringDataWorker extends Worker {
                             ? "0" + calendar.get(Calendar.HOUR) : "" + calendar.get(Calendar.HOUR))
                             + "." +
                             (calendar.get(Calendar.MINUTE) < 10
-                            ? "0" + calendar.get(Calendar.MINUTE)
-                            : "" + calendar.get(Calendar.MINUTE));
+                                    ? "0" + calendar.get(Calendar.MINUTE)
+                                    : "" + calendar.get(Calendar.MINUTE));
                     String mHrs = time.substring(10, 15);
                     if (hrs.compareTo(mHrs) >= 0)
                         return false;
