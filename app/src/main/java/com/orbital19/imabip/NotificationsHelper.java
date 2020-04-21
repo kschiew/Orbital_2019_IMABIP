@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v4.app.NotificationCompat;
 
 /** Helper class to manage notification channels, and create notifications. */
 public class NotificationsHelper extends ContextWrapper {

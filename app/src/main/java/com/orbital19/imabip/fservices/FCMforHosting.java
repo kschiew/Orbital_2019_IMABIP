@@ -1,7 +1,6 @@
 package com.orbital19.imabip.fservices;
 
 import android.app.Notification;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;

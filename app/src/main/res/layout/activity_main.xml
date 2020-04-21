@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_activity"
@@ -8,7 +8,7 @@
     android:scrollbarTrackHorizontal="@android:drawable/ic_popup_sync"
     tools:context=".MainActivity">
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/refreshButt"
         android:layout_width="59dp"
         android:layout_height="61dp"
@@ -32,7 +32,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@android:drawable/ic_popup_sync" />
 
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,30 +40,30 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="16dp">
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/view_event_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Games" />
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/view_enrolled_events"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Enrolled" />
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/view_hosting_events"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hosting" />
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/view_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Account" />
-    </android.support.design.widget.TabLayout>
+    </com.google.android.material.tabs.TabLayout>
 
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -73,7 +73,7 @@
 
     </FrameLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

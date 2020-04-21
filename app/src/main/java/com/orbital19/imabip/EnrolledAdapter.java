@@ -2,7 +2,6 @@ package com.orbital19.imabip;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +10,13 @@ import android.widget.TextView;
 
 import androidx.work.WorkManager;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 

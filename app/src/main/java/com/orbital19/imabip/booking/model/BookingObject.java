@@ -1,9 +1,6 @@
 package com.orbital19.imabip.booking.model;
 
-import android.support.v4.widget.NestedScrollView;
-
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.orbital19.imabip.models.Event;
 import com.orbital19.imabip.models.User;
 
 import java.io.Serializable;

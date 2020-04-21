@@ -1,8 +1,6 @@
 package com.orbital19.imabip;
 
-import android.support.annotation.NonNull;
-
-import androidx.work.Data;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -14,7 +12,6 @@ import com.orbital19.imabip.teams.models.Team;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public final class DataManagement {
     private String userEmail;

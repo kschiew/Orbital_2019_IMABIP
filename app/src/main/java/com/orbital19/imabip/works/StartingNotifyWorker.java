@@ -2,8 +2,7 @@ package com.orbital19.imabip.works;
 
 import android.app.Notification;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
+import androidx.annotation.NonNull;
 
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
@@ -13,7 +12,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.orbital19.imabip.NotificationsHelper;
-import com.orbital19.imabip.R;
 import com.orbital19.imabip.models.Event;
 
 /*

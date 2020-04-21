@@ -1,9 +1,8 @@
 package com.orbital19.imabip.works;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import androidx.work.ListenableWorker;
 import androidx.work.Worker;
